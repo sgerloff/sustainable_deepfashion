@@ -1,32 +1,32 @@
 import joblib
-from siamese_model import get_siamese_model
+from models.siamese_model import get_siamese_model
 import tensorflow as tf
 
 from batch_generator import BatchGenerator
 
 if __name__ == "__main__":
 
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
-        try:
-            # Currently, memory growth needs to be the same across GPUs
-            for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
-            logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-        except RuntimeError as e:
-            # Memory growth must be set before GPUs have been initialized
-            print(e)
+    # gpus = tf.config.experimental.list_physical_devices('GPU')
+    # if gpus:
+    #     try:
+    #         # Currently, memory growth needs to be the same across GPUs
+    #         for gpu in gpus:
+    #             tf.config.experimental.set_memory_growth(gpu, True)
+    #         logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+    #         print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+    #     except RuntimeError as e:
+    #         # Memory growth must be set before GPUs have been initialized
+    #         print(e)
 
     print(f"Load database...")
-    df = joblib.load("deepfashion_train.joblib")
+    df = joblib.load("joblib/deepfashion_train.joblib")
     print(f"Load training pairs...")
-    pairs = joblib.load("pairs_training.joblib")
+    pairs = joblib.load("joblib/pairs_training.joblib")
 
     batch_generator = BatchGenerator(df, pairs)
 
-    training_size = len(pairs) // 1000
-    bs = 8
+    training_size = len(pairs) // 100
+    bs = 16
     dataset = tf.data.Dataset.from_generator(batch_generator.tf_generator, args=[training_size],
                                              output_types=({"input_1": tf.float16, "input_2": tf.float16}, tf.float16),
                                              output_shapes=({"input_1": [600, 600, 3], "input_2": [600, 600, 3]}, ())
