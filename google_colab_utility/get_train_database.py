@@ -1,12 +1,8 @@
 import argparse
 import joblib
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input', type=str, help='path to data_base joblib file')
-    args = parser.parse_args()
-
-    df = joblib.load(args.input)
+def get_clean_database(path):
+    df = joblib.load(path)
     #Drop items with invalid bounding box:
     df.drop(index=df[df["bounding_box"].apply(lambda x: sum(x)) == 0].index, inplace=True)
     #Remove items with no paired entries:
@@ -15,3 +11,12 @@ if __name__ == "__main__":
     unique_entries = df[df['pair_id'].apply(lambda x: x in single_pair_id)]
     print(f"Contains {len(unique_entries)} entries with unique pair_id, which we will drop.")
     df.drop(index=unique_entries.index, inplace=True)
+    return df
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input', type=str, help='path to data_base joblib file')
+    args = parser.parse_args()
+
+    df = get_clean_database(args.input)
+    df.info()
