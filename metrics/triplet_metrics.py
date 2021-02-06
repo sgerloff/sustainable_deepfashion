@@ -54,9 +54,10 @@ class AllTripletMetric(OptimisticTripletMetric):
     def score(self, y_true, y_pred):
         pos_distance, neg_distance = self.get_distances(y_true, y_pred)
 
-        tmp_pos = tf.broadcast_to(pos_distance, (neg_distance.shape[0], pos_distance.shape[0]))
-        tmp_neg = tf.transpose(tf.broadcast_to(neg_distance, (pos_distance.shape[0], neg_distance.shape[0])))
-
-        pos_is_smaller = tmp_pos < tmp_neg
-
-        return tf.reduce_sum(tf.cast(pos_is_smaller, tf.int64)) / (pos_is_smaller.shape[0] * pos_is_smaller.shape[1])
+        if (pos_distance.shape[0] != None) & (neg_distance.shape[0] != None):
+            tmp_pos = tf.broadcast_to(pos_distance, (neg_distance.shape[0], pos_distance.shape[0]))
+            tmp_neg = tf.transpose(tf.broadcast_to(neg_distance, (pos_distance.shape[0], neg_distance.shape[0])))
+            pos_is_smaller = tmp_pos < tmp_neg
+            return tf.reduce_sum(tf.cast(pos_is_smaller, tf.int64)) / (pos_is_smaller.shape[0] * pos_is_smaller.shape[1])
+        else:
+            return 0.
