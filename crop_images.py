@@ -13,7 +13,7 @@ def crop_and_rewrite(target_path, df_cat):
     for i in tqdm(df_cat.index):
         # Retrieve and split image path:
         image_path = df_cat.loc[i, "image"]
-        image_name = image_path.split("\\")[-1].split(".")[0]
+        image_name = image_path.split(os.path.sep)[-1].split(".")[0]
         # Read image:
         im = Image.open(image_path)
         # Crop to bounding  box:
