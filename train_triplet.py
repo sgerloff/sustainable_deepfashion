@@ -27,7 +27,7 @@ dataset = dataset.batch(bs, drop_remainder=True).repeat()
 # metrics = [OptimisticTripletMetric(), PessimisticTripletMetric(), AllTripletMetric()]
 metric = PessimisticTripletMetric()
 
-model = TripletModel((resolution, resolution,3))
+model = TripletModel((resolution, resolution,3), trainable=True)
 model.compile(loss=tfa.losses.TripletSemiHardLoss(),
               optimizer="adam",
               metrics=[metric.score])

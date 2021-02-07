@@ -8,10 +8,10 @@ from tensorflow.keras import layers
 from tensorflow.keras import Model
 
 
-def TripletModel(input_shape):
+def TripletModel(input_shape, trainable=False):
     input_image = Input(input_shape)
     effnet = EfficientNetB0(input_tensor=input_image, include_top=False, weights="imagenet")
-    effnet.trainable = False
+    effnet.trainable = trainable
     x = effnet(input_image)
 
     embedding_model = Sequential()
@@ -28,10 +28,15 @@ def TripletModel(input_shape):
     # embedding_model.add(layers.Lambda(lambda t: K.l2_normalize(t)))
 
     # Inspired by: https://developer.ridgerun.com/wiki/index.php?title=GstInference/Supported_architectures/FaceNet
-    embedding_model.add(layers.AveragePooling2D(pool_size=(7, 7)))
+    # embedding_model.add(layers.AveragePooling2D(pool_size=(7, 7)))
+    # embedding_model.add(layers.Flatten())
+    # embedding_model.add(layers.Dense(128, activation="relu"))
+    # embedding_model.add(layers.Softmax())
+    
+    #See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
     embedding_model.add(layers.Flatten())
-    embedding_model.add(layers.Dense(128, activation="relu"))
-    embedding_model.add(layers.Softmax())
+    embedding_model.add(layers.Dense(256, activation=None))  # No activation on final dense layer
+    embedding_model.add(layers.Lambda(lambda x: K.l2_normalize(x, axis=1)))  # L2 normalize embeddings
 
     x = embedding_model(x)
 
