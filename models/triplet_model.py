@@ -32,7 +32,7 @@ def TripletModel(input_shape, trainable=False):
     # embedding_model.add(layers.Flatten())
     # embedding_model.add(layers.Dense(128, activation="relu"))
     # embedding_model.add(layers.Softmax())
-    
+
     #See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
     embedding_model.add(layers.Flatten())
     embedding_model.add(layers.Dense(256, activation=None))  # No activation on final dense layer
