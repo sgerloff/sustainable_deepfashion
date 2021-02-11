@@ -11,14 +11,14 @@ https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok
 It is advised to create a python environment of your choice. For example:
 
 ```bash
-    conda create -n fashion python=3.8
-    conda activate fashion
+conda create -n fashion python=3.8
+conda activate fashion
 ```
 
 ## Write the database from the dataset
 To combine the meta data for the images to one database, you can excute the following script.
 ```bash
-    python write_database.py --input="dir/of/data" --output="deepfashion_train.joblib"
+python write_database.py --input="dir/of/data" --output="deepfashion_train.joblib"
 ```
 This script reads all the data, creates a pandas dataframe and saves it as a joblib object.
 
