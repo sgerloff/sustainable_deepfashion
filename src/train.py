@@ -1,8 +1,8 @@
 import joblib
-from models.siamese_model import get_siamese_model
+from src.models.siamese_model import get_siamese_model
 import tensorflow as tf
 
-from batch_generator import BatchGenerator
+from src.data.siamese_batch_generator import SiameseBatchGenerator
 
 if __name__ == "__main__":
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     print(f"Load training pairs...")
     pairs = joblib.load("joblib/pairs_training.joblib")
 
-    batch_generator = BatchGenerator(df, pairs)
+    batch_generator = SiameseBatchGenerator(df, pairs)
 
     training_size = len(pairs) // 100
     bs = 16

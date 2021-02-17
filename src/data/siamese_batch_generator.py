@@ -2,7 +2,7 @@ from tensorflow.keras.applications.efficientnet import preprocess_input
 import tensorflow as tf
 
 
-class BatchGenerator():
+class SiameseBatchGenerator():
     def __init__(self, database, pairs):
         self.df = database
         self.pairs = pairs

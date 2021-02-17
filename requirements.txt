@@ -5,3 +5,5 @@ tqdm
 keras
 tensorflow
 numpy
+gdown
+zipfile38

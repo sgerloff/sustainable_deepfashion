@@ -23,11 +23,12 @@ python write_database.py --input="dir/of/data" --output="deepfashion_train.jobli
 This script reads all the data, creates a pandas dataframe and saves it as a joblib object.
 
 ### Load the database
-If you want to load the database, simply execute 
+If you want to load the database, simply execute
 
 ```python
 import joblib
-df = joblib.load("deepfashion_train.joblib")
+
+df = joblib.load("data/processed/deepfashion_train.joblib")
 ```
 
 ### Crop images

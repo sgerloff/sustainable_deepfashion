@@ -1,9 +1,8 @@
 from tensorflow.keras.applications.efficientnet import preprocess_input
 import tensorflow as tf
-import os
 
 
-class TripletBatch:
+class TripletBatchGenerator:
     def __init__(self, database, resolution):
         self.df = database
         self.resolution = resolution

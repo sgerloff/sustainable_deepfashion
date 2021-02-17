@@ -1,19 +1,19 @@
-from models.triplet_model import TripletModel
-from triplet_batch import TripletBatch
+from src.models.triplet_model import TripletModel
+from src.data.triplet_batch_generator import TripletBatchGenerator
 
 import tensorflow as tf
 import tensorflow_addons as tfa
 
-from metrics.triplet_metrics import OptimisticTripletMetric, PessimisticTripletMetric, AllTripletMetric
+from src.metrics import PessimisticTripletMetric
 
 import joblib
 
 resolution = 224
 
-df = joblib.load("category_id_1_deepfashion_train.joblib")
+df = joblib.load("../data/processed/category_id_1_deepfashion_train.joblib")
 print(df.image)
 
-triplet_batch = TripletBatch(df, resolution)
+triplet_batch = TripletBatchGenerator(df, resolution)
 
 training_size = df["pair_id"].nunique() // 1
 bs = 32
