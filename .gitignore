@@ -130,3 +130,4 @@ dmypy.json
 
 # CUSTOM joblib
 *.joblib
+data/

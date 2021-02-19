@@ -27,7 +27,8 @@ def crop_and_rewrite(target_path, df_cat):
             # Update database:
             df_cat.loc[i, "image"] = new_path
         except:
-            print(bounding, im.size)
+            # print(bounding, im.size)
+            pass
     return df_cat
 
 
@@ -41,5 +42,7 @@ if __name__ == "__main__":
     df = joblib.load(args.input)
     tmp = df[df["category_id"] == args.category].copy()
     tmp = crop_and_rewrite(args.output, tmp)
-    joblib.dump(tmp, f"category_id_{args.category}_" + args.input)
-
+    path = os.path.dirname(args.input)
+    basename = os.path.basename(args.input)
+    outfile = os.path.join(path, f"category_id_{args.category}_" + basename)
+    joblib.dump(tmp, outfile)
