@@ -2,11 +2,6 @@
 This is a small test project to explore one-shot training techniques for recognizing cloths from the deepfashion data set.
 
 # Setup
-## Download the datasets
-Go to https://github.com/switchablenorms/DeepFashion2 and download the (train.zip) dataset from their google drive: 
-
-https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok
-
 ## Setup a conda environment (OPTIONAL)
 It is advised to create a python environment of your choice. For example:
 
@@ -52,7 +47,7 @@ Chances are you dont want to repeat this setup process.
 In order to save the processed data execute:
 
 ```bash
-make save-preprocessed-gc CATEGORY_ID=1
+!make save-preprocessed-gc CATEGORY_ID=1
 ```
 
 ### Setup from already preprocessed data
@@ -70,3 +65,8 @@ And next time you start a colab notebook, you can simply load:
 ```
 
 This does speedup the setup process a lot! However, you are stuck with the preprocessed data only, until you load the rest manually.
+
+## Manual download of the datasets
+If the setup scripts fail, you may need to download the dataset from Google Drive manually. Please make sure to put them into the proper folder (```data/raw```).
+Go to https://github.com/switchablenorms/DeepFashion2 and download the (train.zip, validation.zip, test.zip) dataset from their [Google Drive](https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok).
+
