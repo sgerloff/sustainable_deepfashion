@@ -39,6 +39,6 @@ clean-unprocessed:
 
 fetch-extract-gc:
 	python -m src.google_colab_utility connect_gdrive
-	ln -sfn /gdrive/MyDrive/Deepfashion2\ Dataset/*.zip data/raw/
+	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/*.zip data/raw/
 	chmod a+x google_colab_utility/unzip_data.sh
 	google_colab_utility/unzip_data.sh
