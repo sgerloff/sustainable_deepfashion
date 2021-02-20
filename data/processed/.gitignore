@@ -1,0 +1,5 @@
+#Ignore all dataframes
+*.joblib
+#Ignore all sufolders
+train
+validation
