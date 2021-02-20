@@ -41,3 +41,32 @@ In a google colab notebook execute:
 
 !make setup-gc CATEGORY_ID=1 MIN_PAIR_COUNT=20
 ```
+
+This will clone the repository to the base folder of your colab notebook, install the requirments, and continue to setup the data. 
+You will need to provide an access token to mount your google drive as well as the password for the dataset.
+The entire process will take about 30 mins.
+
+### Save the processed data to Google Drive
+
+Chances are you dont want to repeat this setup process.
+In order to save the processed data execute:
+
+```bash
+make save-preprocessed-gc CATEGORY_ID=1
+```
+
+### Setup from already preprocessed data
+
+And next time you start a colab notebook, you can simply load:
+
+```python
+!git init
+!git remote add origin https://github.com/sgerloff/sustainable_deepfashion.git
+!git pull origin main
+
+!pip install -r requirements.txt
+
+!make setup-preprocessed-gc CATEGORY_ID=1 MIN_PAIR_COUNT=20
+```
+
+This does speedup the setup process a lot! However, you are stuck with the preprocessed data only, until you load the rest manually.
