@@ -23,7 +23,7 @@ You will be prompted to enter the [password](https://github.com/switchablenorms/
 make setup-data CATEGORY_ID=1 MIN_PAIR_COUNT=20
 ```
 
-This command will download the crop-traindata from AWS CloudFront, unzip the data, and finally process the data for training.
+This command will download the data from AWS CloudFront, unzip the data, and finally process the data for training.
 The ```CATEGORY_ID``` defines which type of items is trained, while the ```MIN_PAIR_COUNT``` defines the minimum number of items per ```pair_id```.
 However, this script does not clean up the downloaded and intermediate data. If you like to save space, feel free to call ```make clean-unprocessed```.
 
