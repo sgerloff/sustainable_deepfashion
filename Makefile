@@ -2,6 +2,8 @@ setup-data: setup-train-data setup-validation-data
 setup-train-data: download-train extract-train database-train crop-train
 setup-validation-data: download-validation extract-validation database-validation crop-validation
 
+setup-gc: fetch-extract-gc database-train crop-train database-validation crop-validation
+
 download-train:
 	mkdir -p data/raw
 	python -m src.data.setup_data --data="train"
@@ -34,3 +36,9 @@ crop-validation:
 
 clean-unprocessed:
 	rm -r data/raw data/intermediate
+
+fetch-extract-gc:
+	python -m src.google_colab_utility connect_gdrive
+	ln -sfn /gdrive/MyDrive/Deepfashion2\ Dataset/*.zip data/raw/
+	chmod a+x google_colab_utility/unzip_data.sh
+	google_colab_utility/unzip_data.sh
