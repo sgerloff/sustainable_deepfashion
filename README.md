@@ -15,25 +15,29 @@ conda create -n fashion python=3.8
 conda activate fashion
 ```
 
-## Write the database from the dataset
-To combine the meta data for the images to one database, you can excute the following script.
-```bash
-python write_database.py --input="dir/of/data" --output="deepfashion_train.joblib"
-```
-This script reads all the data, creates a pandas dataframe and saves it as a joblib object.
+## Setup data (general)
+To setup the data needed for training you can use the makefile provided.
+You will be prompted to enter the [password](https://github.com/switchablenorms/DeepFashion2) required to unzip the files.
 
-### Load the database
-If you want to load the database, simply execute
+```bash
+make setup-data CATEGORY_ID=1 MIN_PAIR_COUNT=20
+```
+
+This command will download the crop-traindata from AWS CloudFront, unzip the data, and finally process the data for training.
+The ```CATEGORY_ID``` defines which type of items is trained, while the ```MIN_PAIR_COUNT``` defines the minimum number of items per ```pair_id```.
+However, this script does not clean up the downloaded and intermediate data. If you like to save space, feel free to call ```make clean-unprocessed```.
+
+## Setup data (Google Colab)
+To save some time, we can directly take the data from google drive, which can be mounted in google colab.
+To this end, you need to copy a link of the original [dataset](https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok?usp=sharing) to your own google drive.
+In a google colab notebook execute:
 
 ```python
-import joblib
+!git init
+!git remote add origin https://github.com/sgerloff/sustainable_deepfashion.git
+!git pull origin main
 
-df = joblib.load("data/processed/deepfashion_train.joblib")
-```
+!pip install -r requirements.txt
 
-### Crop images
-To save space and load times for training, it is advisable to crop the images to their bounding boxes. To do so, execute the following script passing the category_id you are interested in:
-
-```bash
-python crop_images.py --input="deepfashion_train.joblib" --output="path/to/cropped_images_dir" --category="1"
+!make setup-gc CATEGORY_ID=1 MIN_PAIR_COUNT=20
 ```

@@ -1,8 +1,11 @@
-setup-data: setup-train-data setup-validation-data
-setup-train-data: download-train extract-train database-train crop-train
-setup-validation-data: download-validation extract-validation database-validation crop-validation
+CATEGORY_ID = 1
+MIN_PAIR_COUNT = 20
 
-setup-gc: fetch-extract-gc database-train crop-train database-validation crop-validation
+setup-data: setup-train-data setup-validation-data
+setup-train-data: download-train extract-train database-train preprocess-train
+setup-validation-data: download-validation extract-validation database-validation preprocess-validation
+
+setup-gc: fetch-extract-gc database-train preprocess-train database-validation preprocess-validation
 
 download-train:
 	mkdir -p data/raw
@@ -16,8 +19,8 @@ database-train:
 	mkdir -p data/processed
 	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/train" --output="data/processed/deepfashion_train.joblib"
 
-crop-train:
-	python -m src.data.crop_images --input="data/processed/deepfashion_train.joblib" --output="$(shell pwd)/data/processed/train/cat1/" --category="1"
+preprocess-train:
+	python -m src.data.preprocess_data --input="data/processed/deepfashion_train.joblib" --output="$(shell pwd)/data/processed/train/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
 
 download-validation:
 	mkdir -p data/raw
@@ -31,8 +34,8 @@ database-validation:
 	mkdir -p data/processed
 	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/validation" --output="data/processed/deepfashion_validation.joblib"
 
-crop-validation:
-	python -m src.data.crop_images --input="data/processed/deepfashion_validation.joblib" --output="$(shell pwd)/data/processed/validation/cat1/" --category="1"
+preprocess-validation:
+	python -m src.data.preprocess_data --input="data/processed/deepfashion_validation.joblib" --output="$(shell pwd)/data/processed/validation/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
 
 clean-unprocessed:
 	rm -r data/raw data/intermediate
