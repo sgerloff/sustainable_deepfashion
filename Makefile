@@ -45,3 +45,11 @@ fetch-extract-gc:
 	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/*.zip data/raw/
 	chmod a+x google_colab_utility/unzip_data.sh
 	google_colab_utility/unzip_data.sh
+
+save-preprocessed-gc:
+	mkdir -p /gdrive/MyDrive/deepfashion_gc_save
+	zip -r /gdrive/MyDrive/deepfashion_gc_save/preprocessed_cat_$(CATEGORY_ID).zip data/processed/train/cat$(CATEGORY_ID) data/processed/validation/cat$(CATEGORY_ID) data/processed/category_id_$(CATEGORY_ID)_deepfashion_train.joblib data/processed/category_id_$(CATEGORY_ID)_deepfashion_validation.joblib
+
+setup-preprocessed-gc:
+	python -m src.google_colab_utility connect_gdrive
+	unzip /gdrive/MyDrive/deepfashion_gc_save/preprocessed_cat_$(CATEGORY_ID).zip
