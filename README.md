@@ -22,6 +22,7 @@ To setup the data needed for training you can use the makefile provided.
 You will be prompted to enter the [password](https://github.com/switchablenorms/DeepFashion2) required to unzip the files.
 
 ```bash
+pip install -r requirements.txt
 make setup-data CATEGORY_ID=1 MIN_PAIR_COUNT=20
 ```
 
