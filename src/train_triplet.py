@@ -1,55 +1,35 @@
-from src.models.triplet_model import TripletModel
-from src.data.triplet_batch_generator import TripletBatchGenerator
-from src.metrics.triplet_metrics import PessimisticTripletMetric
 from src.utility import get_project_dir
-
-import tensorflow as tf
-import tensorflow_addons as tfa
 
 import joblib
 import json
 import os
 import time
 
-
-def get_dataset(generator, batch_size=32, training_size=100, resolution=224):
-    dataset = tf.data.Dataset.from_generator(generator, args=[batch_size, training_size],
-                                             output_types=(tf.float16, tf.float16),
-                                             output_shapes=([resolution, resolution, 3], ())
-                                             )
-    return dataset.cache().batch(batch_size, drop_remainder=True).prefetch(2).repeat()
-
+from src.models.triplet_model import EfficientNetTriplet
 
 if __name__ == "__main__":
-    train_dataframe = joblib.load(os.path.join(get_project_dir(),
-                                               "data",
-                                               "processed",
-                                               "category_id_1_deepfashion_train.joblib"))
+    effnet_triplet = EfficientNetTriplet()
 
-    resolution = 224
-    triplet_batch = TripletBatchGenerator(train_dataframe, resolution)
+    train_df = joblib.load(os.path.join(get_project_dir(),
+                                        "data",
+                                        "processed",
+                                        "category_id_1_deepfashion_train.joblib"))
 
-    training_size = train_dataframe["pair_id"].nunique() // 100
-    batch_size = 64
+    validation_df = joblib.load(os.path.join(get_project_dir(),
+                                             "data",
+                                             "processed",
+                                             "category_id_1_deepfashion_validation.joblib"))
 
-    dataset = get_dataset(triplet_batch.tf_generator,
-                          batch_size=batch_size,
-                          training_size=training_size,
-                          resolution=resolution)
+    # Train with basemodel frozen:
+    effnet_triplet.basemodel.trainable = False
+    effnet_triplet.train(train_df, validation_df, epochs=10, training_ratio=1., batch_size=64)
 
-    pessimistic_metric = PessimisticTripletMetric()
+    # Unfreeze some layers from the basemodel (last half):
+    effnet_triplet.set_trainable_ratio(0.5)
+    history = effnet_triplet.train(train_df, validation_df, epochs=100, training_ratio=1., batch_size=64)
 
-    model = TripletModel((resolution, resolution, 3), trainable=True)
-    model.compile(loss=tfa.losses.TripletSemiHardLoss(),
-                  optimizer=tf.optimizers.Adam(learning_rate=1e-5),
-                  metrics=[pessimistic_metric.score])
-    history = model.fit(dataset,
-                        steps_per_epoch=training_size,
-                        epochs=10,
-                        callbacks=[tf.keras.callbacks.ModelCheckpoint(
-                            os.path.join(get_project_dir(), "models", "triplet_" + time.strftime("%Y%m%d") + ".h5")
-                        )])
-
-    json.dump(history, open(os.path.join(get_project_dir(),
-                                         "reports",
-                                         "triplet_history_" + time.strftime("%Y%m%d") + ".json")))
+    with open(os.path.join(get_project_dir(),
+                           "reports",
+                           "triplet_history_" + time.strftime("%Y%m%d") + ".json"),
+              "w") as report:
+        json.dump(history.history, report)
