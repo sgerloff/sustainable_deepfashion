@@ -40,8 +40,8 @@ class TripletBatchGenerator:
             for b in batch_indices:
                 yield self.get_array_for_item(b), self.df.loc[b, "pair_id"]
 
-    def get_keras_dataset(self, batch_size, training_size_ratio):
-        training_size = int(training_size_ratio*self.df["pair_id"].unique())
+    def get_keras_dataset(self, batch_size=64, training_size_ratio=1.):
+        training_size = int(training_size_ratio*len(self.df["pair_id"].unique()))
         dataset = tf.data.Dataset.from_generator(self.tf_generator, args=[batch_size, training_size],
                                                  output_types=(tf.float16, tf.float16),
                                                  output_shapes=([self.resolution, self.resolution, 3], ())
