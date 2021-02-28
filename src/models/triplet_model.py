@@ -15,6 +15,7 @@ from src.utility import get_project_dir
 
 import time, os
 
+
 class EfficientNetTriplet:
     def __init__(self, input_shape=(224, 224, 3)):
         self.input_shape = input_shape
@@ -92,7 +93,7 @@ class EfficientNetTriplet:
 
     def get_dataset(self, dataframe, training_ratio=0.1, batch_size=64):
         triplet_batch = TripletBatchGenerator(dataframe, self.input_shape[0])
-        return triplet_batch.get_keras_dataset(training_ratio=training_ratio, batch_size=batch_size)
+        return triplet_batch.get_keras_dataset(training_size_ratio=training_ratio, batch_size=batch_size)
 
 
 if __name__ == "__main__":
