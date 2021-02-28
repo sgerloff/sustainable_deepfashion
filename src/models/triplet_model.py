@@ -95,8 +95,20 @@ class EfficientNetTriplet:
         triplet_batch = TripletBatchGenerator(dataframe, self.input_shape[0])
         return triplet_batch.get_keras_dataset(training_size_ratio=training_ratio, batch_size=batch_size)
 
+    def save(self, path):
+        tf.keras.models.save_model(self.model, path)
+
+    def load(self, path):
+        dependencies = {
+            "score": self.metric.score
+        }
+        self.model = tf.keras.models.load_model(path, custom_objects=dependencies)
+        self.basemodel = self.model.layers[1]
 
 if __name__ == "__main__":
     tmodel = EfficientNetTriplet()
     tmodel.set_trainable_ratio(0.5)
-    print(tmodel.summary())
+    print(tmodel.model.summary())
+
+    tmodel.save(os.path.join(get_project_dir(), "models",  "triplet_test_" + time.strftime("%Y%m%d") + ".h5"))
+    tmodel.load(os.path.join(get_project_dir(), "models", "triplet_test_" + time.strftime("%Y%m%d") + ".h5"))
