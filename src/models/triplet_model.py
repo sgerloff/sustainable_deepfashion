@@ -95,20 +95,29 @@ class EfficientNetTriplet:
         triplet_batch = TripletBatchGenerator(dataframe, self.input_shape[0])
         return triplet_batch.get_keras_dataset(training_size_ratio=training_ratio, batch_size=batch_size)
 
-    def save(self, path):
-        tf.keras.models.save_model(self.model, path)
+    def save(self, file, fileName=True):
+        if fileName:
+            file = self.get_default_path(file)
+        tf.keras.models.save_model(self.model, file)
 
-    def load(self, path):
+    def load(self, file, fileName=True):
+        if fileName:
+            file = self.get_default_path(file)
         dependencies = {
             "score": self.metric.score
         }
-        self.model = tf.keras.models.load_model(path, custom_objects=dependencies)
+        self.model = tf.keras.models.load_model(file, custom_objects=dependencies)
         self.basemodel = self.model.layers[1]
+
+    @staticmethod
+    def get_default_path(file):
+        return os.path.join(get_project_dir(), "models", file + ".h5")
+
 
 if __name__ == "__main__":
     tmodel = EfficientNetTriplet()
     tmodel.set_trainable_ratio(0.5)
     print(tmodel.model.summary())
 
-    tmodel.save(os.path.join(get_project_dir(), "models",  "triplet_test_" + time.strftime("%Y%m%d") + ".h5"))
+    tmodel.save(os.path.join(get_project_dir(), "models", "triplet_test_" + time.strftime("%Y%m%d") + ".h5"))
     tmodel.load(os.path.join(get_project_dir(), "models", "triplet_test_" + time.strftime("%Y%m%d") + ".h5"))

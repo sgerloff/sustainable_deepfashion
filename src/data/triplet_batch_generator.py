@@ -46,4 +46,4 @@ class TripletBatchGenerator:
                                                  output_types=(tf.float16, tf.float16),
                                                  output_shapes=([self.resolution, self.resolution, 3], ())
                                                  )
-        return dataset.cache().batch(batch_size, drop_remainder=True).prefetch(2).repeat(), training_size
+        return dataset.batch(batch_size, drop_remainder=True).repeat(), training_size
