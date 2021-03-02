@@ -5,7 +5,7 @@ import json
 import os
 import time
 
-from src.models.triplet_model import EfficientNetTriplet
+from src.models.efficient_net_triplet import EfficientNetTriplet
 
 if __name__ == "__main__":
     effnet_triplet = EfficientNetTriplet()

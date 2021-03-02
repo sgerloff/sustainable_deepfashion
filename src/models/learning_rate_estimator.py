@@ -2,7 +2,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.models.triplet_model import EfficientNetTriplet
+from src.models.efficient_net_triplet import EfficientNetTriplet
 from src.utility import get_project_dir
 
 import joblib, os, tempfile
@@ -126,6 +126,8 @@ class LearningRateEstimator:
         # if the title is not empty, add it to the plot
         if title != "":
             plt.title(title)
+        plt.show()
+
 
 if __name__ == "__main__":
     path_to_train_df = os.path.join(

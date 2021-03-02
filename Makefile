@@ -44,7 +44,7 @@ fetch-extract-gc:
 	python -m src.google_colab_utility connect_gdrive
 	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/*.zip data/raw/
 	chmod a+x google_colab_utility/unzip_data.sh
-	google_colab_utility/unzip_data.sh
+	scripts/google_colab_utility/unzip_data.sh
 
 save-preprocessed-gc:
 	mkdir -p /gdrive/MyDrive/deepfashion_gc_save

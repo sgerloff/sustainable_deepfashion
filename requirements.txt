@@ -4,7 +4,7 @@ pandas
 tqdm
 keras
 matplotlib
-tensorflow==2.3.0
+tensorflow==2.4.1
 tensorflow_addons
 numpy
 requests
