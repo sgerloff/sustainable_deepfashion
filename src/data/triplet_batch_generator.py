@@ -1,5 +1,6 @@
 from tensorflow.keras.applications.efficientnet import preprocess_input
 import tensorflow as tf
+import random
 
 
 class TripletBatchGenerator:
@@ -33,7 +34,7 @@ class TripletBatchGenerator:
 
     def tf_generator(self, bs, training_range):
         unique_pair_ids = self.df["pair_id"].unique()
-
+        random.shuffle(unique_pair_ids)
         for i in range(training_range):
             pair_id = unique_pair_ids[i % len(unique_pair_ids)]
             batch_indices = self.generate_batch_for_pair_id(pair_id, bs)
