@@ -27,13 +27,13 @@ make setup-data CATEGORY_ID=1 MIN_PAIR_COUNT=20
 ```
 
 This command will download the data from AWS CloudFront, unzip the data, and finally process the data for training.
-The ```CATEGORY_ID``` defines which type of items is trained, while the ```MIN_PAIR_COUNT``` defines the minimum number of items per ```pair_id```.
-However, this script does not clean up the downloaded and intermediate data. If you like to save space, feel free to call ```make clean-unprocessed```.
+The ```CATEGORY_ID``` defines on which type of items the network will be trained, while the ```MIN_PAIR_COUNT``` defines the minimum number of items per ```pair_id```.
+However, this script does not clean up the downloaded and intermediate data. If you like to save space, feel free to call ```make clean-unprocessed``` after running the above command.
 
 ## Setup data (Google Colab)
 To save some time, we can directly take the data from google drive, which can be mounted in google colab.
-To this end, you need to copy a link of the original [dataset](https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok?usp=sharing) to your own google drive.
-In a google colab notebook execute:
+To this end, you first need to add a shortcut of the original [dataset](https://drive.google.com/drive/folders/125F48fsMBz2EF0Cpqk6aaHet5VH399Ok?usp=sharing) to your own google drive.
+Afterwards you can execute the following code in a google colab notebook:
 
 ```python
 !git init
