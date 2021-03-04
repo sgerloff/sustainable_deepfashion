@@ -23,7 +23,7 @@ if __name__ == "__main__":
                     'training environment, train the model, and allows '
                     'to execute bash commands after finishing.')
     parser.add_argument('--instruction', type=str,
-                        default='aws_frozen.json',
+                        default='effnet_0.0_trainable_ratio.json',
                         help='relative path to instructions from <project>/instructions/')
 
     args = parser.parse_args()

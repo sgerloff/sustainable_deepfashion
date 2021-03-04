@@ -34,7 +34,7 @@ class TripletBatchGenerator:
 
     def tf_generator(self, bs, training_range):
         unique_pair_ids = self.df["pair_id"].unique()
-        random.shuffle(unique_pair_ids)
+        random.shuffle(unique_pair_ids) #Don't forget to shuffle the training data.
         for i in range(training_range):
             pair_id = unique_pair_ids[i % len(unique_pair_ids)]
             batch_indices = self.generate_batch_for_pair_id(pair_id, bs)
@@ -47,4 +47,4 @@ class TripletBatchGenerator:
                                                  output_types=(tf.float16, tf.float16),
                                                  output_shapes=([self.resolution, self.resolution, 3], ())
                                                  )
-        return dataset.batch(batch_size, drop_remainder=True).repeat(), training_size
+        return dataset.batch(batch_size, drop_remainder=True).prefetch(buffer_size=tf.data.AUTOTUNE).repeat(), training_size

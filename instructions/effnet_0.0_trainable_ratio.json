@@ -12,10 +12,10 @@
   },
   "callbacks": {
     "Checkpoint": {
-      "path": "effnet_frozen.h5"
+      "path": "effnet_0.0_trainable_ratio.h5"
     },
     "Tensorboard": {
-      "log_dir": "effnet_frozen"
+      "log_dir": "effnet_0.0_trainable_ratio.h5"
     },
     "CyclicLR": {
       "base_lr": 1e-5,
@@ -24,5 +24,5 @@
       "mode": "exp_range"
     }
   },
-  "clean_script": "aws/cleanup.sh"
+  "clean_script": "aws/cleanup.sh models/effnet_0.0_trainable_ratio.h5 reports/tensorboard_logs/effnet_0.0_trainable_ratio.h5"
 }

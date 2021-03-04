@@ -1,5 +1,6 @@
 CATEGORY_ID = 1
 MIN_PAIR_COUNT = 20
+INSTRUCTION =
 
 setup-data: setup-train-data setup-validation-data
 setup-train-data: download-train extract-train database-train preprocess-train
@@ -53,3 +54,7 @@ save-preprocessed-gc:
 setup-preprocessed-gc:
 	python -m src.google_colab_utility connect_gdrive
 	unzip /gdrive/MyDrive/deepfashion_gc_save/preprocessed_cat_$(CATEGORY_ID).zip
+
+train-aws-stop:
+	python -m src.train_instruction --instruction=$(INSTRUCTION)
+	sudo shutdown now -h
