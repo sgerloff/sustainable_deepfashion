@@ -30,19 +30,26 @@ class EfficientNetTriplet:
         self.basemodel.trainable = False
         x = self.basemodel(input_image)
 
-        # See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
-        embedding_model = models.Sequential(name="embedding_extraction")
-        embedding_model.add(layers.MaxPool2D(
-            pool_size=(7, 7)))  # Reducing dimensions (7,7,1280)->(1,1,1280) to keep parameters in check
-        embedding_model.add(layers.Flatten())
-        embedding_model.add(layers.Dense(256, activation=None))  # No activation on final dense layer
-        embedding_model.add(layers.Lambda(lambda x: tf.keras.backend.l2_normalize(x, axis=1)))  # L2 normalize embeddings
+        embedding_model = self.set_embedding_model()
 
         x = embedding_model(x)
 
         self.model = models.Model(inputs=input_image, outputs=x)
         self.compile()
         return self.model
+
+    def set_embedding_model(self):
+        # See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
+        embedding_model = models.Sequential(name="embedding_extraction")
+        # Reducing dimensions (7,7,1280)->(1,1,1280) to keep parameters in check
+        embedding_model.add(layers.GlobalAveragePooling2D())
+        embedding_model.add(layers.Flatten())
+        # No activation on final dense layer
+        embedding_model.add(layers.Dense(256, activation=None))
+        # L2 normalize embeddings
+        embedding_model.add(layers.Lambda(lambda x: tf.keras.backend.l2_normalize(x, axis=1)))
+
+        return embedding_model
 
     def set_trainable_ratio(self, ratio):
         # Setting the layers trainable parameter does not reset the basemodel's parameter
@@ -123,6 +130,20 @@ class EfficientNetTriplet:
         return os.path.join(get_project_dir(), "models", file)
 
 
+class EfficientNetTripletBigTop(EfficientNetTriplet):
+    def set_embedding_model(self):
+        # See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
+        embedding_model = models.Sequential(name="embedding_extraction")
+        embedding_model.add(layers.GlobalAveragePooling2D())
+        embedding_model.add(layers.Dense(512, activation="relu"))
+        # No activation on final dense layer
+        embedding_model.add(layers.Dense(256, activation=None))
+        # L2 normalize embeddings
+        embedding_model.add(layers.Lambda(lambda x: tf.keras.backend.l2_normalize(x, axis=1)))
+
+        return embedding_model
+
+
 if __name__ == "__main__":
     tmodel = EfficientNetTriplet()
     tmodel.set_trainable_ratio(0.5)
@@ -130,3 +151,6 @@ if __name__ == "__main__":
 
     tmodel.save("triplet_test_" + time.strftime("%Y%m%d")+".h5")
     tmodel.load("triplet_test_" + time.strftime("%Y%m%d")+".h5")
+
+    tmodel2 = EfficientNetTripletBigTop()
+    print(tmodel2.model.layers[2].summary())

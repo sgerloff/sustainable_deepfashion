@@ -3,7 +3,7 @@ from src.utility import get_project_dir
 
 from src.models.callbacks import *
 #Supported models
-from src.models.efficient_net_triplet import EfficientNetTriplet
+from src.models.efficient_net_triplet import *
 
 
 def load_dataframe(path):
