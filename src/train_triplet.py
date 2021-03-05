@@ -25,7 +25,7 @@ if __name__ == "__main__":
     effnet_triplet.train(train_df, validation_df, epochs=10, training_ratio=1., batch_size=64)
 
     # Unfreeze some layers from the basemodel (last half):
-    effnet_triplet.set_trainable_ratio(0.5)
+    effnet_triplet.set_basemodel_freeze_ratio(0.5)
     history = effnet_triplet.train(train_df, validation_df, epochs=100, training_ratio=1., batch_size=64)
 
     with open(os.path.join(get_project_dir(),

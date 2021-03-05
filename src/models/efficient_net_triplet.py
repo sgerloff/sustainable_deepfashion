@@ -51,7 +51,7 @@ class EfficientNetTriplet:
 
         return embedding_model
 
-    def set_trainable_ratio(self, ratio):
+    def set_basemodel_freeze_ratio(self, ratio):
         # Setting the layers trainable parameter does not reset the basemodel's parameter
         self.basemodel.trainable = True
 
@@ -146,7 +146,7 @@ class EfficientNetTripletBigTop(EfficientNetTriplet):
 
 if __name__ == "__main__":
     tmodel = EfficientNetTriplet()
-    tmodel.set_trainable_ratio(0.5)
+    tmodel.set_basemodel_freeze_ratio(0.5)
     print(tmodel.model.summary())
 
     tmodel.save("triplet_test_" + time.strftime("%Y%m%d")+".h5")

@@ -4,7 +4,7 @@
   "model": "EfficientNetTriplet",
   "load": "None",
   "learning_rate": 1e-5,
-  "trainable_basemodel_ratio": 0.0,
+  "freeze_basemodel_ratio": 1.0,
   "train_keywords": {
     "epochs": 100,
     "training_ratio": 1.0,

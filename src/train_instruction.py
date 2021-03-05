@@ -45,7 +45,7 @@ if __name__ == "__main__":
     instruction["train_keywords"]["callbacks"] = callbacks
 
     model.set_learning_rate(instruction["learning_rate"])
-    model.set_trainable_ratio(instruction["trainable_basemodel_ratio"])
+    model.set_basemodel_freeze_ratio(instruction["freeze_basemodel_ratio"])
     history = model.train(train_df, validation_df, **instruction["train_keywords"])
 
     #Execute commands to clean up, e.g. save results to persistent storage, shutdown instance and more
