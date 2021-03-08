@@ -60,7 +60,10 @@ class EfficientNetTriplet:
         for layer in self.basemodel.layers[:ratio_index]:
             layer.trainable = False
         for layer in self.basemodel.layers[ratio_index:]:
-            layer.trainable = True
+            if layer.__class__.__name__ == "BatchNormalization":
+                layer.trainable = False
+            else:
+                layer.trainable = True
 
         # Recompile the model to make sure the changes are applied
         self.compile()
