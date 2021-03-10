@@ -12,7 +12,7 @@ def read_data(path_to_data):
     for i in tqdm(range(1,number_of_files+1)):
         f = open(os.path.join(path_to_data, "annos", f"{i:06d}.json"), "r")
         data = json.load(f)
-        items = [ i for i in data.keys() if i.startswith("item")]
+        items = [key for key in data.keys() if key.startswith("item")]
         for item in items:
             data[item]["image"] = os.path.join(path_to_data, "image", f"{i:06d}.jpg")
             data[item]["pair_id"] = data["pair_id"]
