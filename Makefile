@@ -56,5 +56,5 @@ setup-preprocessed-gc:
 	unzip /gdrive/MyDrive/deepfashion_gc_save/preprocessed_cat_$(CATEGORY_ID).zip
 
 train-aws-stop:
-	python -m src.train_instruction --instruction=$(INSTRUCTION)
+	python -m src.train_from_instruction --instruction=$(INSTRUCTION)
 	sudo shutdown now -h
