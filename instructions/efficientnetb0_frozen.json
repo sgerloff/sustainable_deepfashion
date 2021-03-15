@@ -1,7 +1,7 @@
 {
   "train_data": {
     "dataframe": "data/processed/category_id_1_deepfashion_train.joblib",
-    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory",
+    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
     "kwargs": {
       "batch_size": 64,
       "data_slice_ratio": 1.0,
