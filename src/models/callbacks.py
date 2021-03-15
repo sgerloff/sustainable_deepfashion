@@ -6,15 +6,15 @@ from tensorflow.keras.callbacks import Callback
 from tensorflow.keras import backend as K
 import numpy as np
 
-def Checkpoint(path="default.h5", file_name=True, keywords={}):
+def Checkpoint(path="default", file_name=True, kwargs={}):
     if file_name:
-        path = os.path.join(get_project_dir(), "models", path)
-    return tf.keras.callbacks.ModelCheckpoint(path, **keywords)
+        path = os.path.join(get_project_dir(), "models", path + ".h5")
+    return tf.keras.callbacks.ModelCheckpoint(path, **kwargs)
 
-def Tensorboard(log_dir="default", dir_name=True, keywords={}):
+def Tensorboard(log_dir="default", dir_name=True, kwargs={}):
     if dir_name:
         log_dir = os.path.join(get_project_dir(), "reports", "tensorboard_logs", log_dir)
-    return tf.keras.callbacks.TensorBoard(log_dir=log_dir, **keywords)
+    return tf.keras.callbacks.TensorBoard(log_dir=log_dir, **kwargs)
 
 #From https://github.com/bckenstler/CLR/blob/master/clr_callback.py
 class CyclicLR(Callback):

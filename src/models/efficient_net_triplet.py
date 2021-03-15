@@ -3,7 +3,7 @@ import tensorflow as tf
 import tensorflow_addons as tfa
 
 from src.metrics.triplet_metrics import PessimisticTripletMetric
-from src.data.triplet_batch_generator import TripletBatchGenerator
+from src.data.triplet_batch_generator import *
 
 from tensorflow.keras import layers
 from tensorflow.keras import models
@@ -145,6 +145,45 @@ class EfficientNetTripletBigTop(EfficientNetTriplet):
         embedding_model.add(layers.Lambda(lambda x: tf.keras.backend.l2_normalize(x, axis=1)))
 
         return embedding_model
+
+
+class EmancipatedEfficientNetTriplet(EfficientNetTriplet):
+    def __init__(self, input_shape=(224,224,3)):
+        super().__init__(input_shape)
+        self.randomRotation = tf.keras.layers.experimental.preprocessing.RandomRotation(0.5, fill_mode="constant")
+
+    def get_dataset(self, dataframe, training_ratio=0.1, batch_size=64):
+        triplet_batch = GenericTripletBatchGenerator(dataframe)
+        dataset, training_size = triplet_batch.get_keras_dataset(training_size_ratio=training_ratio, batch_size=batch_size)
+        dataset = dataset.map( self.preprocess, num_parallel_calls=-1
+        )
+        dataset = dataset.batch(batch_size, drop_remainder=True)
+        dataset = dataset.prefetch(1).repeat()
+        return dataset, training_size
+
+    def preprocess(self, x, y):
+        print("x.shape: ", x.shape)
+        x = tf.io.read_file(x)
+        x = tf.io.decode_jpeg(x, channels=3)
+        x = tf.image.resize(x, [self.input_shape[0], self.input_shape[1]])
+        x = self.augment(x)
+        print("x after: ", x)
+        print("y.shape: ", y.shape)
+        y = tf.reshape(y, ())
+        return x, y
+
+    def augment(self, x):
+        tmp_shape = x.shape
+        x = self.randomRotation(tf.expand_dims(x, axis=0))
+        x = tf.reshape(x, tmp_shape)
+
+        x = tf.image.random_brightness(x, 64)
+        x = tf.image.random_contrast(x, 0.7, 1.)
+        x = tf.image.random_hue(x , 0.05)
+        x = tf.image.random_saturation(x , 0.6, 1.0)
+        x = tf.clip_by_value(x, 0., 255.)
+        x = tf.cast(x, tf.float16)
+        return x
 
 
 if __name__ == "__main__":
