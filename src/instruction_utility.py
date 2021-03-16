@@ -93,6 +93,6 @@ class InstructionParser:
         return dict_in
 
     def get_cleanup_cmd(self):
-        cmd = self.instruction["cleanup_script"]
+        cmd = self.instruction["clean_script"]
         cmd = cmd.replace("__default_filename__", self.identifier)
         return cmd
