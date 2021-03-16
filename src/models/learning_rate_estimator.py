@@ -9,8 +9,8 @@ import joblib, os, tempfile
 
 
 class LearningRateEstimator:
-    def __init__(self, model, stop_factor=4, beta=0.98):
-        self.model = model
+    def __init__(self, stop_factor=4, beta=0.98):
+        self.model = None
         self.stop_factor = stop_factor
         self.beta = beta
 
@@ -72,15 +72,16 @@ class LearningRateEstimator:
             self.best_loss = smooth
         return False
 
-    def find(self, dataset,
-             start_learning_rate,
-             stop_learning_rate,
+    def find(self, model, dataset,
+             start_learning_rate=1e-10,
+             stop_learning_rate=1e1,
              epochs=None,
              steps_per_epoch=None,
              sample_size=2048,
              verbose=1):
         # Initialize all values
         self.reset()
+        self.model = model
         # Set sufficient amount of epochs
         if epochs is None:
             epochs = int(np.ceil(sample_size / float(steps_per_epoch)))
@@ -141,6 +142,10 @@ if __name__ == "__main__":
     effnet = EfficientNetTriplet()
     dataset, train_size = effnet.get_dataset(train_df, training_ratio=1., batch_size=32)
 
-    learningRateEstimator = LearningRateEstimator(effnet.model)
-    learningRateEstimator.find(dataset, 1e-10, 1e2, steps_per_epoch=train_size)
+    learningRateEstimator = LearningRateEstimator()
+    learningRateEstimator.find(effnet.model,
+                               dataset,
+                               start_learning_rate=1e-10,
+                               stop_learning_rate=1e2,
+                               steps_per_epoch=train_size)
     learningRateEstimator.plot_loss(title="Frozen basemodel EfficientNetB0")
