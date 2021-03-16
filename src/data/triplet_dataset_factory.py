@@ -41,7 +41,7 @@ class TripletDatasetFactory:
 class AugmentedTripletDatasetFactory(TripletDatasetFactory):
     def __init__(self, database, preprocessor=(lambda x: x), input_shape=(224, 224, 3)):
         super().__init__(database, preprocessor=preprocessor, input_shape=input_shape)
-        self.randomRotation = tf.keras.layers.experimental.preprocessing.RandomRotation(0.5, fill_mode="constant")
+        self.randomRotation = tf.keras.layers.experimental.preprocessing.RandomRotation(0.5, fill_mode="wrap")
 
     def augment(self, x):
         tmp_shape = x.shape
