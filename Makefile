@@ -58,3 +58,6 @@ setup-preprocessed-gc:
 train-aws-stop:
 	python -m src.train_from_instruction --instruction=$(INSTRUCTION)
 	sudo shutdown now -h
+
+train:
+	python -m src.train_from_instruction --instruction=$(INSTRUCTION)
