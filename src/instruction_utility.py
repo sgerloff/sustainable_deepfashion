@@ -43,7 +43,10 @@ class InstructionParser:
             self.instruction["model"]["factory"])(**self.instruction["model"]["kwargs"])
 
     def set_basemodel_freeze_ratio(self):
-        ratio = self.instruction["model"]["basemodel_freeze_ratio"]
+        ratio = None
+        if "basemodel_freeze_ratio" in self.instruction["model"].keys():
+            ratio = self.instruction["model"]["basemodel_freeze_ratio"]
+
         if ratio is not None:
             self.model_factory.set_basemodel_freeze_ratio(ratio)
 
