@@ -10,7 +10,7 @@ class TripletModelFactory:
     def set_basemodel(self):
         pass
 
-    def set_embedding(self):
+    def set_embedding_model(self):
         pass
 
     def set_basemodel_freeze_ratio(self, ratio):
