@@ -5,7 +5,7 @@ tqdm
 keras
 matplotlib
 tensorflow
-tensorflow_addons
+tensorflow-addons
 numpy
 requests
 zipfile38
