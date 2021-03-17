@@ -17,11 +17,16 @@ if __name__ == "__main__":
     instruction_parser = InstructionParser(args.instruction)
 
     model = instruction_parser.get_model()
-    model.compile(
-        loss=instruction_parser.get_loss(),
-        optimizer=instruction_parser.get_optimizer(),
-        metrics=[instruction_parser.get_metric()]
-    )
+
+    compile_kwargs = {}
+    if instruction_parser.get_loss() is not None:
+        compile_kwargs["loss"] = instruction_parser.get_loss()
+    if instruction_parser.get_optimizer() is not None:
+        compile_kwargs["optimizer"] = instruction_parser.get_optimizer()
+    if instruction_parser.get_metric() is not None:
+        compile_kwargs["metrics"] = [instruction_parser.get_metric()]
+
+    model.compile(**compile_kwargs)
 
     train_dataset = instruction_parser.get_train_dataset()
     validation_dataset = instruction_parser.get_validation_dataset()

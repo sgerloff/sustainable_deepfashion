@@ -82,14 +82,24 @@ class InstructionParser:
         return self.model_factory.get_model()
 
     def get_loss(self):
-        return instance_from_string(self.instruction["loss"]["loss"])(**self.instruction["loss"]["kwargs"])
+        if self.instruction["loss"] != "None":
+            return instance_from_string(self.instruction["loss"]["loss"])(**self.instruction["loss"]["kwargs"])
+        else:
+            return None
 
     def get_optimizer(self):
-        return instance_from_string(self.instruction["optimizer"]["optimizer"])(
-            **self.instruction["optimizer"]["kwargs"])
+        if self.instruction["optimizer"] != "None":
+            return instance_from_string(self.instruction["optimizer"]["optimizer"])(
+                **self.instruction["optimizer"]["kwargs"])
+        else:
+            return None
 
     def get_metric(self):
-        return instance_from_string(self.instruction["metric"]["metric"])(**self.instruction["metric"]["kwargs"]).score
+        if self.instruction["metric"] != "None":
+            return instance_from_string(self.instruction["metric"]["metric"])(
+                **self.instruction["metric"]["kwargs"]).score
+        else:
+            return None
 
     def get_fit_kwargs(self):
         return self.instruction["model"]["fit"]["kwargs"]
@@ -139,9 +149,9 @@ class InstructionParser:
 
     def zip_results(self):
         with zipfile.ZipFile(self.identifier + ".zip", "w") as zipf:
-            zipf.write( remove_project_dir(self.metadata_path))
-            zipf.write( self.metadata["saved_model"])
-            zipf.write( self.metadata["tensorboard_log_dir"])
+            zipf.write(remove_project_dir(self.metadata_path))
+            zipf.write(self.metadata["saved_model"])
+            zipf.write(self.metadata["tensorboard_log_dir"])
 
 
 if __name__ == "__main__":
