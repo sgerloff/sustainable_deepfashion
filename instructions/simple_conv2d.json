@@ -1,0 +1,71 @@
+{
+  "train_data": {
+    "dataframe": "data/processed/category_id_1_deepfashion_train.joblib",
+    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
+    "kwargs": {
+      "batch_size": 64,
+      "data_slice_ratio": 1.0,
+      "shuffle": "True"
+    }
+  },
+  "validation_data": {
+    "dataframe": "data/processed/category_id_1_deepfashion_validation.joblib",
+    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
+    "kwargs": {
+      "batch_size": 64,
+      "data_slice_ratio": 1.0,
+      "shuffle": "False"
+    }
+  },
+  "model": {
+    "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DTripletModelFactory",
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 128,
+      "filters_per_conv_layer": "[16,32,64,128,256]",
+      "size_dense_layers": "[512, 256]"
+    },
+    "load": "None",
+    "fit": {
+      "kwargs": {
+        "epochs": 100
+      }
+    }
+  },
+  "loss": {
+    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
+    "kwargs": {
+    }
+  },
+  "optimizer": {
+    "optimizer": "tensorflow.keras.optimizers.Adam",
+    "kwargs": {
+      "learning_rate": 1e-5
+    }
+  },
+  "metric": {
+    "metric": "src.metrics.triplet_metrics.PessimisticTripletMetric",
+    "kwargs": {
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.Checkpoint": {
+      "path": "__default_filename__",
+      "kwargs": {
+      }
+    },
+    "src.models.callbacks.Tensorboard": {
+      "log_dir": "__default_filename__",
+      "kwargs": {
+
+      }
+    },
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-6,
+      "max_lr": 5e-4,
+      "step_size": 1824,
+      "mode": "exp_range"
+    }
+  },
+  "cleanup_cmd": "None"
+}
