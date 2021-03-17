@@ -139,9 +139,9 @@ class InstructionParser:
 
     def zip_results(self):
         with zipfile.ZipFile(self.identifier + ".zip", "w") as zipf:
-            zipf.write( remove_project_dir(self.metadata_path)[1:])
-            zipf.write( self.metadata["saved_model"][1:])
-            zipf.write( self.metadata["tensorboard_log_dir"][1:])
+            zipf.write( remove_project_dir(self.metadata_path))
+            zipf.write( self.metadata["saved_model"])
+            zipf.write( self.metadata["tensorboard_log_dir"])
 
 
 if __name__ == "__main__":

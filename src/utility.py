@@ -9,7 +9,7 @@ def get_project_dir():
 
 
 def remove_project_dir(path):
-    return path.replace(get_project_dir(), "")
+    return path.replace(get_project_dir(), "")[1:]
 
 
 def get_hashsum_of_file(path_to_file):
