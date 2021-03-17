@@ -1,5 +1,8 @@
 #!/bin/bash
 
+shopt -s expand_aliases
+source ~/.bash_aliases
+
 echo "Save model to S3-Bucket:"
 aws s3 cp $1 s3://sustainable-deepfashion/$1
 echo "Zip tensorboard logs"
