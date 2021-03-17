@@ -1,6 +1,6 @@
-import joblib, json, os
+import joblib, json, os, subprocess, zipfile
 
-from src.utility import get_project_dir
+from src.utility import get_project_dir, remove_project_dir
 
 
 def instance_from_string(module_path):
@@ -33,9 +33,22 @@ class InstructionParser:
         self.model_factory = self.load_model_factory()
         self.set_basemodel_freeze_ratio()
 
+        self.model_save_path = None
+        self.tensorboard_log_dir = None
+
+        self.metadata_path = None
+        self.metadata = None
+
     def set_identifier(self, path):
         basename = os.path.basename(path)
-        return os.path.splitext(basename)[0]
+        identifier = os.path.splitext(basename)[0]
+        if os.path.isfile(self.get_metadata_path(identifier)):
+            i = 0
+            while os.path.isfile(self.get_metadata_path(identifier + "-" + str(i))):
+                i += 1
+            return identifier + "-" + str(i)
+        else:
+            return identifier
 
     def load_model_factory(self):
         self.instruction["model"]["kwargs"] = evaluate_values_of_dict(self.instruction["model"]["kwargs"])
@@ -69,10 +82,11 @@ class InstructionParser:
         return self.model_factory.get_model()
 
     def get_loss(self):
-        return instance_from_string( self.instruction["loss"]["loss"] )(**self.instruction["loss"]["kwargs"])
+        return instance_from_string(self.instruction["loss"]["loss"])(**self.instruction["loss"]["kwargs"])
 
     def get_optimizer(self):
-        return instance_from_string(self.instruction["optimizer"]["optimizer"])(**self.instruction["optimizer"]["kwargs"])
+        return instance_from_string(self.instruction["optimizer"]["optimizer"])(
+            **self.instruction["optimizer"]["kwargs"])
 
     def get_metric(self):
         return instance_from_string(self.instruction["metric"]["metric"])(**self.instruction["metric"]["kwargs"]).score
@@ -83,8 +97,15 @@ class InstructionParser:
     def get_callbacks(self):
         callbacks = []
         for key in self.instruction["callbacks"].keys():
-            kwargs = self.replace_default_filename_in_kwargs(self.instruction["callbacks"][key])
-            callback = instance_from_string(key)(**kwargs)
+            self.instruction["callbacks"][key] = self.replace_default_filename_in_kwargs(
+                self.instruction["callbacks"][key])
+            callback = instance_from_string(key)(**self.instruction["callbacks"][key])
+
+            if key == "src.models.callbacks.Checkpoint":
+                self.model_save_path = callback.filepath
+            if key == "src.models.callbacks.Tensorboard":
+                self.tensorboard_log_dir = callback.log_dir
+
             callbacks.append(callback)
         return callbacks
 
@@ -96,6 +117,34 @@ class InstructionParser:
         return dict_in
 
     def get_cleanup_cmd(self):
-        cmd = self.instruction["clean_script"]
+        cmd = self.instruction["cleanup_cmd"]
         cmd = cmd.replace("__default_filename__", self.identifier)
         return cmd
+
+    def write_metadata(self):
+        if self.model_save_path is not None:
+            self.metadata_path = self.get_metadata_path(self.identifier)
+            self.metadata = {
+                "saved_model": remove_project_dir(self.model_save_path),
+                "tensorboard_log_dir": remove_project_dir(self.tensorboard_log_dir),
+                "git_commit": subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"),
+                "instruction": self.instruction
+            }
+            with open(self.metadata_path, "w") as file:
+                json.dump(self.metadata, file, indent=4)
+
+    @staticmethod
+    def get_metadata_path(identifier):
+        return os.path.join(get_project_dir(), "models", identifier + ".meta")
+
+    def zip_results(self):
+        with zipfile.ZipFile(self.identifier + ".zip", "w") as zipf:
+            zipf.write( remove_project_dir(self.metadata_path)[1:])
+            zipf.write( self.metadata["saved_model"][1:])
+            zipf.write( self.metadata["tensorboard_log_dir"][1:])
+
+
+if __name__ == "__main__":
+    ip = InstructionParser("efficientnetb0_frozen.json")
+    callbacks = ip.get_callbacks()
+    print(callbacks[0])

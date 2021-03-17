@@ -8,6 +8,10 @@ def get_project_dir():
     return os.path.dirname(file_dir)  # <project_dir>
 
 
+def remove_project_dir(path):
+    return path.replace(get_project_dir(), "")
+
+
 def get_hashsum_of_file(path_to_file):
     buffer = 64*1024  # 64k bytes
     sha256 = hashlib.sha256()

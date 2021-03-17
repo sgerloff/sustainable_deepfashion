@@ -33,6 +33,9 @@ if __name__ == "__main__":
                         callbacks=callbacks,
                         **instruction_parser.get_fit_kwargs())
 
+    instruction_parser.write_metadata()
+    instruction_parser.zip_results()
+
     clean_cmd = instruction_parser.get_cleanup_cmd()
     if clean_cmd != "None":
         os.system(instruction_parser.get_cleanup_cmd())

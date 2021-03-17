@@ -67,5 +67,5 @@
       "mode": "exp_range"
     }
   },
-  "clean_script": "aws/cleanup.sh models/__default_filename__.h5 reports/tensorboard_logs/__default_filename__"
+  "cleanup_cmd": "None"
 }

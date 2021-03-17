@@ -1,7 +1,7 @@
 {
   "train_data": {
     "dataframe": "data/processed/category_id_1_deepfashion_train.joblib",
-    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory",
     "kwargs": {
       "batch_size": 64,
       "data_slice_ratio": 1.0,
@@ -18,12 +18,12 @@
     }
   },
   "model": {
-    "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DTripletModelFactory",
+    "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0TripletModelFactory",
+    "basemodel_freeze_ratio": 1.0,
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "embedding_size": 128,
-      "filters_per_conv_layer": "[16,32,64,128,256]",
-      "size_dense_layers": "[512, 256]"
+      "extraction_layers_size": "[1024, 512, 256]"
     },
     "load": "None",
     "fit": {
@@ -61,11 +61,11 @@
       }
     },
     "src.models.callbacks.CyclicLR": {
-      "base_lr": 1e-6,
-      "max_lr": 5e-4,
+      "base_lr": 1e-5,
+      "max_lr": 1e-1,
       "step_size": 1824,
       "mode": "exp_range"
     }
   },
-  "clean_script": "None"
+  "cleanup_cmd": "None"
 }
