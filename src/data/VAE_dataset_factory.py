@@ -10,10 +10,12 @@ class VAEDatasetFactory:
         files = self.df['image'].tolist()
         dataset = tf.data.Dataset.from_tensor_slices(files)
 
+        if shuffle:
+            dataset = dataset.shuffle(1000)
+
         dataset = dataset.map(self.preprocess, num_parallel_calls=-1)
         dataset = dataset.batch(batch_size)
-        if shuffle:
-            dataset = dataset.shuffle(10000)
+
         return dataset
 
     def preprocess(self, filename):
