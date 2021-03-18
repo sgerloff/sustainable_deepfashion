@@ -29,8 +29,7 @@ class EfficientNetB0TripletModelFactory(TripletModelFactory):
         embedding_model.add(tf.keras.layers.Flatten())
 
         # Adding Dense layers according to the extraction layer sizes
-        for layer_size in self.extraction_layers_size:
-            embedding_model.add(tf.keras.layers.Dense(layer_size, activation="relu"))
+        self.build_embedding_layer_body(embedding_model)
 
         # No activation on final dense layer
         embedding_model.add(tf.keras.layers.Dense(self.embedding_size, activation=None))
@@ -39,8 +38,30 @@ class EfficientNetB0TripletModelFactory(TripletModelFactory):
 
         return embedding_model
 
+    def build_embedding_layer_body(self, embedding_model):
+        for layer_size in self.extraction_layers_size:
+            embedding_model.add(tf.keras.layers.Dense(layer_size, activation="relu"))
+
     def preprocessor(self):
         return tf.keras.applications.efficientnet.preprocess_input
+
+
+class EfficientNetB0DropoutTripletModelFactory(EfficientNetB0TripletModelFactory):
+    def __init__(self,
+                 input_shape=(224, 224, 3),
+                 embedding_size=128,
+                 extraction_layers_size=[1024, 512, 256],
+                 dropout_ratios=[0.1,0.2,0.3]):
+        self.dropout_ratios = dropout_ratios
+        super().__init__(input_shape=input_shape,
+                         embedding_size=embedding_size,
+                         extraction_layers_size=extraction_layers_size)
+        assert len(self.dropout_ratios) == len(self.extraction_layers_size)
+
+    def build_embedding_layer_body(self, embedding_model):
+        for item in zip(self.extraction_layers_size, self.dropout_ratios):
+            embedding_model.add(tf.keras.layers.Dense(item[0], activation="relu"))
+            embedding_model.add(tf.keras.layers.Dropout(item[1]))
 
 
 if __name__ == "__main__":
