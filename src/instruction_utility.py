@@ -17,6 +17,32 @@ def load_instruction(path):
         instruction_ = json.load(file)
     return instruction_
 
+def load_metadata(path):
+    metadata_file = os.path.join(get_project_dir(), "models", path)
+    with open(metadata_file, "r") as file:
+        metadata_ = json.load(file)
+    return metadata_
+
+def load_model_from_metadata(path, compile=True):
+    metadata = load_metadata(path)
+    ip = InstructionParser(metadata["instruction"], is_dict=True)
+    model = ip.get_model()
+    model.load_weights(metadata["saved_model"])
+    compile_kwargs = get_compile_kwargs_from_instruction_parser(ip)
+    if compile:
+        model.compile(**compile_kwargs)
+    return model
+
+
+def get_compile_kwargs_from_instruction_parser(instruction_parser):
+    compile_kwargs = {}
+    if instruction_parser.get_loss() is not None:
+        compile_kwargs["loss"] = instruction_parser.get_loss()
+    if instruction_parser.get_optimizer() is not None:
+        compile_kwargs["optimizer"] = instruction_parser.get_optimizer()
+    if instruction_parser.get_metric() is not None:
+        compile_kwargs["metrics"] = [instruction_parser.get_metric()]
+    return compile_kwargs
 
 def load_dataframe(path):
     return joblib.load(os.path.join(get_project_dir(), path))
@@ -27,20 +53,25 @@ def evaluate_values_of_dict(dict_in):
 
 
 class InstructionParser:
-    def __init__(self, instruction_path):
-        self.identifier = self.set_identifier(instruction_path)
-        self.instruction = load_instruction(instruction_path)
+    def __init__(self, instruction, is_dict=False):
+        if is_dict:
+            self.identifier = "instruction_from_metadata_THIS_SHOULD_NOT_HAPPEN"
+            self.instruction = instruction
+        else:
+            self.identifier = self.set_identifier(instruction)
+            self.instruction = load_instruction(instruction)
 
-        self.copy_instruction()
+            self.copy_instruction()
+
+            self.model_save_path = None
+            self.tensorboard_log_dir = None
+            self.metadata_path = None
+            self.metadata = None
 
         self.model_factory = self.load_model_factory()
         self.set_basemodel_freeze_ratio()
 
-        self.model_save_path = None
-        self.tensorboard_log_dir = None
 
-        self.metadata_path = None
-        self.metadata = None
 
     def copy_instruction(self):
         if "copy_instruction" in self.instruction.keys():
