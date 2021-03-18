@@ -3,7 +3,7 @@
     "dataframe": "data/processed/category_id_1_deepfashion_train.joblib",
     "factory": "src.data.VAE_dataset_factory.VAEDatasetFactory",
     "kwargs": {
-      "batch_size": 64,
+      "batch_size": 256,
       "shuffle": "True"
     }
   },
@@ -11,7 +11,7 @@
     "dataframe": "data/processed/category_id_1_deepfashion_validation.joblib",
     "factory": "src.data.VAE_dataset_factory.VAEDatasetFactory",
     "kwargs": {
-      "batch_size": 64,
+      "batch_size": 256,
       "shuffle": "False"
     }
   },
@@ -20,12 +20,12 @@
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "latent_dim": 3,
-      "filters_per_conv_layer": "[16,32,64,128,256]"
+      "filters_per_conv_layer": "[8, 16, 32, 64, 128, 256, 512, 1024]"
     },
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 250
       }
     }
   },
