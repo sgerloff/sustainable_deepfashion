@@ -23,7 +23,7 @@ def load_metadata(path):
         metadata_ = json.load(file)
     return metadata_
 
-def load_model_from_metadata(path, compile=True):
+def load_model_and_instruction_parser_from_metadata(path, compile=True):
     metadata = load_metadata(path)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
     model = ip.get_model()
@@ -31,7 +31,7 @@ def load_model_from_metadata(path, compile=True):
     compile_kwargs = get_compile_kwargs_from_instruction_parser(ip)
     if compile:
         model.compile(**compile_kwargs)
-    return model
+    return model, ip
 
 
 def get_compile_kwargs_from_instruction_parser(instruction_parser):
