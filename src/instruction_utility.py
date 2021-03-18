@@ -1,4 +1,4 @@
-import joblib, json, os, subprocess, zipfile
+import joblib, json, os, subprocess, zipfile, shutil
 
 from src.utility import get_project_dir, remove_project_dir
 
@@ -174,10 +174,11 @@ class InstructionParser:
         return os.path.join(get_project_dir(), "models", identifier + ".meta")
 
     def zip_results(self):
-        with zipfile.ZipFile(self.identifier + ".zip", "w") as zipf:
+        zip_path = self.identifier + ".zip"
+        shutil.make_archive(zip_path, "zip", base_dir=self.metadata["tensorboard_log_dir"], root_dir=get_project_dir())
+        with zipfile.ZipFile(self.identifier + ".zip", "a") as zipf:
             zipf.write(remove_project_dir(self.metadata_path))
             zipf.write(self.metadata["saved_model"])
-            zipf.write(self.metadata["tensorboard_log_dir"])
 
 
 if __name__ == "__main__":
