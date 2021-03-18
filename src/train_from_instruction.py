@@ -9,7 +9,7 @@ if __name__ == "__main__":
                     'training environment, train the model, and allows '
                     'to execute bash commands after finishing.')
     parser.add_argument('--instruction', type=str,
-                        default='new_format_test.json',
+                        default='simple_conv2d.json',
                         help='relative path to instructions from <project>/instructions/')
 
     args = parser.parse_args()

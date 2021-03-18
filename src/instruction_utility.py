@@ -30,6 +30,9 @@ class InstructionParser:
     def __init__(self, instruction_path):
         self.identifier = self.set_identifier(instruction_path)
         self.instruction = load_instruction(instruction_path)
+
+        self.copy_instruction()
+
         self.model_factory = self.load_model_factory()
         self.set_basemodel_freeze_ratio()
 
@@ -38,6 +41,29 @@ class InstructionParser:
 
         self.metadata_path = None
         self.metadata = None
+
+    def copy_instruction(self):
+        if "copy_instruction" in self.instruction.keys():
+            parent_instruction = load_instruction(self.instruction["copy_instruction"])
+            self.instruction.pop("copy_instruction")
+
+            for key in self.instruction.keys():
+                parent_instruction = self.overwrite_values(parent_instruction, self.instruction, key)
+
+            self.instruction = parent_instruction
+
+
+    def overwrite_values(self, target_dict, source_dict, key):
+        if key in target_dict.keys():
+            if isinstance(source_dict[key], dict) and isinstance(target_dict[key], dict):
+                for k in source_dict[key].keys():
+                    target_dict[key] = self.overwrite_values(target_dict[key], source_dict[key], k)
+            else:
+                target_dict[key] = source_dict[key]
+        else:
+            target_dict[key] = source_dict[key]
+        return target_dict
+
 
     def set_identifier(self, path):
         basename = os.path.basename(path)
