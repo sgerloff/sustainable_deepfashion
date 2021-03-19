@@ -8,13 +8,20 @@ from tqdm import tqdm
 
 def split_train_validation_pair_id(dataframe, min_count=20):
     pair_id_counts = dataframe.groupby(by="pair_id").count().min(axis=1)
+
     validation_pair_id = pair_id_counts[pair_id_counts < min_count].index
     train_pair_id = pair_id_counts[pair_id_counts >= min_count].index
+    single_pair_id = pair_id_counts[pair_id_counts <= 1].index
 
     validation_entries = dataframe[dataframe['pair_id'].apply(lambda x: x in validation_pair_id)]
     train_entries = dataframe[dataframe['pair_id'].apply(lambda x: x in train_pair_id)]
+    single_entries = dataframe[dataframe['pair_id'].apply(lambda x: x in single_pair_id)]
 
-    return dataframe.drop(index=validation_entries.index), dataframe.drop(index=train_entries.index)
+    train_df = dataframe.drop(index=validation_entries.index)
+    validation_df = dataframe.drop(index=train_entries.index)
+    validation_df = validation_df.drop(index=single_entries.index)
+
+    return train_df, validation_df
 
 
 def crop_and_rewrite(target_path, df_cat):
@@ -63,8 +70,8 @@ if __name__ == "__main__":
     # Define output file
     path = os.path.dirname(args.input)
     basename = os.path.basename(args.input)
-    train_outfile = os.path.join(path, f"category_id_{args.category}_min_pair_count_{args.min_count}_deepfashion_train")
-    validation_outfile = os.path.join(path, f"category_id_{args.category}_min_pair_count_{args.min_count}_deepfashion_validation")
+    train_outfile = os.path.join(path, f"category_id_{args.category}_min_pair_count_{args.min_count}_deepfashion_train.joblib")
+    validation_outfile = os.path.join(path, f"category_id_{args.category}_min_pair_count_{args.min_count}_deepfashion_validation.joblib")
     # Write database to file
     train, validation = split_dataframe_train_validation(df, category_id=args.category, min_count=args.min_count)
     print("Crop and rewrite training data:")

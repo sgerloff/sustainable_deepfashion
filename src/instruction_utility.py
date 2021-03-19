@@ -133,7 +133,10 @@ class InstructionParser:
         return self.load_dataset(self.instruction["train_data"])
 
     def get_validation_dataset(self):
-        return self.load_dataset(self.instruction["validation_data"])
+        if self.instruction["validation_data"] == "None":
+            return None
+        else:
+            return self.load_dataset(self.instruction["validation_data"])
 
     def get_model(self):
         return self.model_factory.get_model()
