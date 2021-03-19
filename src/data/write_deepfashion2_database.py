@@ -17,7 +17,9 @@ def read_data(path_to_data):
             data[item]["image"] = os.path.join(path_to_data, "image", f"{i:06d}.jpg")
             data[item]["pair_id"] = data["pair_id"]
             data[item]["source"] = data["source"]
-            tmp.append(data[item])
+            # An item with style 0 is essentially unidentified with respect to the pair_id. Thus we drop them:
+            if data[item]["style"] != 0:
+                tmp.append(data[item])
     return pd.DataFrame(tmp)
 
 if __name__ == "__main__":

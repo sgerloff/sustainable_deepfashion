@@ -3,14 +3,14 @@ MIN_PAIR_COUNT = 20
 INSTRUCTION =
 DEEPFASHION_DATA = "train"
 
-setup-data: setup-train-data setup-validation-data
-setup-train-data: set-deepfashion-train download extract database preprocess
-setup-validation-data: set-deepfashion-validation download extract database preprocess
+setup-data: setup-deepfashion-train-data setup-deepfashion-validation-data merge-database set-deepfashion-merged preprocess
+setup-deepfashion-train-data: set-deepfashion-train download extract database
+setup-deepfashion-validation-data: set-deepfashion-validation download extract database
 
 setup-gc: fetch-extract-gc set-deepfashion-train database preprocess set-deepfashion-validation database preprocess
 
-set-deepfashion-test:
-	$(eval DEEPFASHION_DATA := test)
+set-deepfashion-merged:
+	$(eval DEEPFASHION_DATA := merged)
 
 set-deepfashion-train:
 	$(eval DEEPFASHION_DATA := train)
@@ -28,10 +28,14 @@ extract:
 
 database:
 	mkdir -p data/processed
-	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/$(DEEPFASHION_DATA)" --output="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib"
+	python -m src.data.write_deepfashion2_database --input="$(shell pwd)/data/intermediate/$(DEEPFASHION_DATA)" --output="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib"
+
+merge-database:
+	mkdir -p data/processed
+	python -m src.data.merge_databases --inputs "$(shell pwd)/data/processed/deepfashion_train.joblib" "$(shell pwd)/data/processed/deepfashion_validation.joblib" --output "$(shell pwd)/data/processed/deepfashion_merged.joblib"
 
 preprocess:
-	python -m src.data.preprocess_data --input="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib" --output="$(shell pwd)/data/processed/$(DEEPFASHION_DATA)/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
+	python -m src.data.preprocess_data --input="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib" --output="$(shell pwd)/data/processed/category_$(CATEGORY_ID)_min_count_$(MIN_PAIR_COUNT)/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
 
 clean-unprocessed:
 	rm -r data/raw data/intermediate
