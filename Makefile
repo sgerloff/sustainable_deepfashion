@@ -1,42 +1,37 @@
 CATEGORY_ID = 1
 MIN_PAIR_COUNT = 20
 INSTRUCTION =
+DEEPFASHION_DATA = "train"
 
 setup-data: setup-train-data setup-validation-data
-setup-train-data: download-train extract-train database-train preprocess-train
-setup-validation-data: download-validation extract-validation database-validation preprocess-validation
+setup-train-data: set-deepfashion-train download extract database preprocess
+setup-validation-data: set-deepfashion-validation download extract database preprocess
 
-setup-gc: fetch-extract-gc database-train preprocess-train database-validation preprocess-validation
+setup-gc: fetch-extract-gc set-deepfashion-train database preprocess set-deepfashion-validation database preprocess
 
-download-train:
+set-deepfashion-test:
+	$(eval DEEPFASHION_DATA := test)
+
+set-deepfashion-train:
+	$(eval DEEPFASHION_DATA := train)
+
+set-deepfashion-validation:
+	$(eval DEEPFASHION_DATA := validation)
+
+download:
 	mkdir -p data/raw
-	python -m src.data.setup_data --data="train"
+	python -m src.data.setup_data --data="$(DEEPFASHION_DATA)"
 
-extract-train:
+extract:
 	mkdir -p data/intermediate
-	unzip -n -d data/intermediate/ data/raw/train.zip
+	unzip -n -d data/intermediate/ data/raw/$(DEEPFASHION_DATA).zip
 
-database-train:
+database:
 	mkdir -p data/processed
-	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/train" --output="data/processed/deepfashion_train.joblib"
+	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/$(DEEPFASHION_DATA)" --output="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib"
 
-preprocess-train:
-	python -m src.data.preprocess_data --input="data/processed/deepfashion_train.joblib" --output="$(shell pwd)/data/processed/train/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
-
-download-validation:
-	mkdir -p data/raw
-	python -m src.data.setup_data --data="validation"
-
-extract-validation:
-	mkdir -p data/intermediate
-	unzip -n -d data/intermediate/ data/raw/validation.zip
-
-database-validation:
-	mkdir -p data/processed
-	python -m src.data.write_database --input="$(shell pwd)/data/intermediate/validation" --output="data/processed/deepfashion_validation.joblib"
-
-preprocess-validation:
-	python -m src.data.preprocess_data --input="data/processed/deepfashion_validation.joblib" --output="$(shell pwd)/data/processed/validation/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
+preprocess:
+	python -m src.data.preprocess_data --input="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib" --output="$(shell pwd)/data/processed/$(DEEPFASHION_DATA)/cat1/" --category=$(CATEGORY_ID) --min_count=$(MIN_PAIR_COUNT)
 
 clean-unprocessed:
 	rm -r data/raw data/intermediate
