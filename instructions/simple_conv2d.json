@@ -8,15 +8,7 @@
       "shuffle": "True"
     }
   },
-  "validation_data": {
-    "dataframe": "data/processed/category_id_1_deepfashion_validation.joblib",
-    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
-    "kwargs": {
-      "batch_size": 64,
-      "data_slice_ratio": 1.0,
-      "shuffle": "False"
-    }
-  },
+  "validation_data": "None",
   "model": {
     "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DTripletModelFactory",
     "kwargs": {
