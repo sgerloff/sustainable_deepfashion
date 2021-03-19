@@ -1,6 +1,6 @@
 {
   "train_data": {
-    "dataframe": "data/processed/category_id_1_deepfashion_train.joblib",
+    "dataframe": "data/processed/category_id_1_min_pair_count_10_deepfashion_train.joblib",
     "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
     "kwargs": {
       "batch_size": 64,
