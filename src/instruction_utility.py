@@ -205,8 +205,7 @@ class InstructionParser:
         return os.path.join(get_project_dir(), "models", identifier + ".meta")
 
     def zip_results(self):
-        zip_path = self.identifier + ".zip"
-        shutil.make_archive(zip_path, "zip", base_dir=self.metadata["tensorboard_log_dir"], root_dir=get_project_dir())
+        shutil.make_archive(self.identifier, "zip", base_dir=self.metadata["tensorboard_log_dir"], root_dir=get_project_dir())
         with zipfile.ZipFile(self.identifier + ".zip", "a") as zipf:
             zipf.write(remove_project_dir(self.metadata_path))
             zipf.write(self.metadata["saved_model"])
