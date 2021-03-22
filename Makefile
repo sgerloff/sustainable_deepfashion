@@ -11,7 +11,7 @@ setup-deepfashion-train-data: download-df-train extract-df-train database-df-tra
 setup-deepfashion-validation-data: DEEPFASHION_DATA = validation
 setup-deepfashion-validation-data: download-df-validation extract-df-validation database-df-validation
 
-setup-gc: fetch-extract-gc set-deepfashion-train database preprocess set-deepfashion-validation database preprocess
+setup-gc: fetch-extract-gc database-df-train database-df-validation preprocess
 
 download-df-train download-df-validation:
 	mkdir -p data/raw
