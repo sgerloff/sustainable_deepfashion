@@ -27,7 +27,7 @@ def load_model_from_metadata(path, compile=True):
     metadata = load_metadata(path)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
     model = ip.get_model()
-    model.load_weights(metadata["saved_model"])
+    model.load_weights(os.path.join(get_project_dir(), metadata["saved_model"]))
     compile_kwargs = get_compile_kwargs_from_instruction_parser(ip)
     if compile:
         model.compile(**compile_kwargs)

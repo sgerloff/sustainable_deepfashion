@@ -1,6 +1,10 @@
 import tensorflow as tf
 import os
-from src.utility import get_project_dir
+
+from src.data.random_pair_dataset_factory import RandomPairDatasetFactory
+from src.instruction_utility import *
+
+from src.metrics.top_k_from_dataset import TopKAccuracyLoop
 
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras import backend as K
@@ -147,3 +151,46 @@ class CyclicLR(Callback):
             self.history.setdefault(k, []).append(v)
 
         K.set_value(self.model.optimizer.lr, self.clr())
+
+
+class TopKValidation(tf.keras.callbacks.Callback):
+    def __init__(self, dataset, epoch_frequency=10, saved_weights_path=None):
+        super().__init__()
+        self.dataset = dataset
+
+        self.saved_weights = saved_weights_path
+
+        self.epoch_frequency = epoch_frequency
+        self.best_top_k = 0.
+
+    def on_epoch_end(self, epoch, logs=None):
+        if epoch % self.epoch_frequency == 0:
+            topk = TopKAccuracyLoop(self.model, self.dataset)
+            # top1 = topk.get_top_k_accuracy(1)
+            print(f"\n{topk.get_top_k_accuracies(k_list=[1,5,10])}")
+
+
+    def save_best_weights(self, top_1_accuracy):
+        if top_1_accuracy >= self.best_top_k:
+            pass
+
+
+if __name__ == "__main__":
+    ip = InstructionParser("simple_conv2d.json")
+    model = ip.get_model()
+
+    validation_df = load_dataframe("data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib")
+
+    factory = RandomPairDatasetFactory(validation_df)
+    dataset = factory.get_dataset(batch_size=16, shuffle=True)
+
+    train_dataset = ip.get_train_dataset()
+    model.compile(
+        loss=ip.get_loss(),
+        optimizer=ip.get_optimizer()
+    )
+    model.fit(train_dataset,
+              epochs=2,
+              steps_per_epoch=2,
+              callbacks=[TopKValidation(dataset, epoch_frequency=1)]
+              )

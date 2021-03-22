@@ -26,7 +26,10 @@ def read_data(path_to_data):
             else:
                 ignore_count += 1
     print(f"Found {ignore_count} items with style 0, which we will ignore.")
-    return pd.DataFrame(tmp)
+    df = pd.DataFrame(tmp)
+    duplicate_bool = df.duplicated(subset=["pair_id", "image"])
+    print(f"Found {len(df[duplicate_bool])} duplicated entries, which we will drop")
+    return df[~duplicate_bool]
 
 
 if __name__ == "__main__":
