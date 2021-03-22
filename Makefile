@@ -30,6 +30,11 @@ extract-df-train extract-df-validation:
 	mkdir -p data/intermediate
 	unzip -n -d data/intermediate/ data/raw/$(DEEPFASHION_DATA).zip
 
+extract-df-train-gc extract-df-validation-gc:
+	mkdir -p data/intermediate
+	chmod a+x scripts/google_colab_utility/unzip_data.sh
+	scripts/google_colab_utility/unzip_data.sh $(DEEPFASHION_DATA)
+
 database-df-train database-df-validation:
 	mkdir -p data/processed
 	python -m src.data.write_deepfashion2_database --input="$(shell pwd)/data/intermediate/$(DEEPFASHION_DATA)" --output="data/processed/deepfashion_$(DEEPFASHION_DATA).joblib"
