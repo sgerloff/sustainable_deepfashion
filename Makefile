@@ -1,7 +1,7 @@
 CATEGORY_ID = 1
 MIN_PAIR_COUNT = 10
 INSTRUCTION =
-DEEPFASHION_DATA =
+DEEPFASHION_DATA = merged
 
 setup-data: setup-deepfashion-train-data setup-deepfashion-validation-data merge-database preprocess
 
@@ -11,7 +11,7 @@ setup-deepfashion-train-data: download-df-train extract-df-train database-df-tra
 setup-deepfashion-validation-data: DEEPFASHION_DATA = validation
 setup-deepfashion-validation-data: download-df-validation extract-df-validation database-df-validation
 
-setup-gc: fetch-extract-gc database-df-train database-df-validation preprocess
+setup-gc: fetch-extract-gc database-df-train database-df-validation merge-database preprocess
 
 download-df-train download-df-validation:
 	mkdir -p data/raw
