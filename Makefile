@@ -11,11 +11,20 @@ setup-deepfashion-train-data: download-df-train extract-df-train database-df-tra
 setup-deepfashion-validation-data: DEEPFASHION_DATA = validation
 setup-deepfashion-validation-data: download-df-validation extract-df-validation database-df-validation
 
-setup-gc: fetch-extract-gc database-df-train database-df-validation merge-database preprocess
+setup-gc: connect-google-drive setup-deepfashion-train-data-gc setup-deepfashion-validation-data-gc
+
+setup-deepfashion-train-data-gc: DEEPFASHION_DATA = train
+setup-deepfashion-train-data-gc: download-df-train-gc extract-df-train database-df-train
+
+setup-deepfashion-validation-data-gc: DEEPFASHION_DATA = validation
+setup-deepfashion-validation-data-gc: download-df-validation-gc extract-df-validation database-df-validation
 
 download-df-train download-df-validation:
 	mkdir -p data/raw
 	python -m src.data.setup_data --data="$(DEEPFASHION_DATA)"
+
+download-df-train-gc download-df-validaiton-gc:
+	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/$(DEEPFASHHION_DATA).zip data/raw/
 
 extract-df-train extract-df-validation:
 	mkdir -p data/intermediate
@@ -36,11 +45,8 @@ preprocess:
 clean-unprocessed:
 	rm -r data/raw data/intermediate
 
-fetch-extract-gc:
+connect-google-drive:
 	python -m src.google_colab_utility connect_gdrive
-	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/*.zip data/raw/
-	chmod a+x scripts/google_colab_utility/unzip_data.sh
-	scripts/google_colab_utility/unzip_data.sh
 
 save-preprocessed-gc:
 	mkdir -p /gdrive/MyDrive/deepfashion_gc_save
