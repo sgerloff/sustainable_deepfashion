@@ -14,17 +14,17 @@ setup-deepfashion-validation-data: download-df-validation extract-df-validation 
 setup-gc: connect-google-drive setup-deepfashion-train-data-gc setup-deepfashion-validation-data-gc
 
 setup-deepfashion-train-data-gc: DEEPFASHION_DATA = train
-setup-deepfashion-train-data-gc: download-df-train-gc extract-df-train database-df-train
+setup-deepfashion-train-data-gc: download-df-train-gc extract-df-train-gc database-df-train
 
 setup-deepfashion-validation-data-gc: DEEPFASHION_DATA = validation
-setup-deepfashion-validation-data-gc: download-df-validation-gc extract-df-validation database-df-validation
+setup-deepfashion-validation-data-gc: download-df-validation-gc extract-df-validation-gc database-df-validation
 
 download-df-train download-df-validation:
 	mkdir -p data/raw
 	python -m src.data.setup_data --data="$(DEEPFASHION_DATA)"
 
 download-df-train-gc download-df-validaiton-gc:
-	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/$(DEEPFASHHION_DATA).zip data/raw/
+	ln -sfn /gdrive/MyDrive/DeepFashion2\ Dataset/$(DEEPFASHION_DATA).zip data/raw/
 
 extract-df-train extract-df-validation:
 	mkdir -p data/intermediate
