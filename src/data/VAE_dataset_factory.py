@@ -13,7 +13,7 @@ class VAEDatasetFactory:
         if shuffle:
             dataset = dataset.shuffle(1000)
 
-        dataset = dataset.map(self.preprocess, num_parallel_calls=-1)
+        dataset = dataset.map(self.preprocess)
         dataset = dataset.batch(batch_size)
 
         return dataset
