@@ -27,6 +27,7 @@ class TripletDatasetFactory:
         x = tf.io.read_file(x)
         x = tf.io.decode_jpeg(x, channels=3)
         x = tf.image.resize(x, [self.input_shape[0], self.input_shape[1]])
+        x = x/255.
 
         x = self.augment(x)
 
