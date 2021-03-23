@@ -24,7 +24,7 @@ class EfficientNetB0TripletModelFactory(TripletModelFactory):
         # See documentation in tensorflow: https://www.tensorflow.org/addons/tutorials/losses_triplet
         embedding_model = tf.keras.models.Sequential(name="embedding_extraction")
         # Reducing dimensions (7,7,1280)->(1,1,1280) to keep parameters in check
-        # This mimics the architectore of the original top layers from the EfficientNetb0
+        # This mimics the architecture of the original top layers from the EfficientNetb0
         embedding_model.add(tf.keras.layers.GlobalAveragePooling2D())
         embedding_model.add(tf.keras.layers.Flatten())
 
