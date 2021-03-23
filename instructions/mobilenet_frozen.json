@@ -7,6 +7,12 @@
       "input_shape": "(224, 224, 3)",
       "embedding_size": 32,
       "extraction_layers_size": "[1024, 512, 256]"
+    },
+    "load": "None",
+    "fit": {
+      "kwargs": {
+        "epochs": 100
+      }
     }
   }
 }
