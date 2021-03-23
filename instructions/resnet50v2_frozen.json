@@ -1,0 +1,12 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "model": {
+    "factory": "src.models.resnet50_triplet_model_factory.ResNet50V2TripletModelFactory",
+    "basemodel_freeze_ratio": 1.0,
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 32,
+      "extraction_layers_size": "[512, 256, 128]"
+    }
+  }
+}
