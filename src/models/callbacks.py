@@ -179,14 +179,16 @@ class TopKValidation(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         if epoch % self.epoch_frequency == 0:
-            topk = TopKAccuracy(self.model, self.dataset)
-            top_k_accuracies = topk.get_top_k_accuracies(k_list=self.k_list)
+            top_k_accuracies = self.get_top_k_accuracies()
             self.print_info(top_k_accuracies)
             if self.best_model_filepath is not None:
                 self.save_best_weights(top_k_accuracies)
 
             self.top_k_log[epoch] = top_k_accuracies
 
+    def get_top_k_accuracies(self):
+        topk = TopKAccuracy(self.model, self.dataset)
+        return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def print_info(self, top_k_accuracies):
         info = " validation: "
