@@ -1,5 +1,4 @@
 #Ignore all dataframes
 *.joblib
-#Ignore all sufolders
-train
-validation
+#Ignore all subfolders
+category_1_min_count_10
