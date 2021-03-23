@@ -11,6 +11,9 @@ class MobileNetTripletModelFactory(EfficientNetB0TripletModelFactory):
         mobile_net.trainable = False
         return mobile_net
 
+    def preprocessor(self):
+        return tf.keras.applications.mobilenet.preprocess_input
+
 
 class MobileNetV2TripletModelFactory(MobileNetTripletModelFactory):
     def set_basemodel(self):
@@ -20,3 +23,6 @@ class MobileNetV2TripletModelFactory(MobileNetTripletModelFactory):
 
         mobile_net.trainable = False
         return mobile_net
+
+    def preprocessor(self):
+        return tf.keras.applications.mobilenet_v2.preprocess_input

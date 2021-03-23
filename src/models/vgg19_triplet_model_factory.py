@@ -10,3 +10,6 @@ class VGG19TripletModelFactory(EfficientNetB0TripletModelFactory):
 
         vgg19.trainable = False
         return vgg19
+
+    def preprocessor(self):
+        return tf.keras.applications.vgg19.preprocess_input

@@ -10,3 +10,6 @@ class ResNet50V2TripletModelFactory(EfficientNetB0TripletModelFactory):
 
         resnet50v2.trainable = False
         return resnet50v2
+
+    def preprocessor(self):
+        return tf.keras.applications.resnet_v2.preprocess_input
