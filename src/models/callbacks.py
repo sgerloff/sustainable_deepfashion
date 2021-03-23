@@ -206,7 +206,7 @@ class TopKValidation(tf.keras.callbacks.Callback):
 
 class VAETopKValidation(TopKValidation):
     def get_top_k_accuracies(self):
-        topk = VAETopKAccuracy(self.model, self.dataset)
+        topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
 
@@ -216,7 +216,7 @@ if __name__ == "__main__":
 
     train_dataset = ip.get_train_dataset()
     model.compile(
-        loss=ip.get_loss(),
+        # loss=ip.get_loss(),
         optimizer=ip.get_optimizer()
     )
 
