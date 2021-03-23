@@ -8,5 +8,13 @@
       "embedding_size": 32,
       "extraction_layers_size": "[512, 256, 128]"
     }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 5e-5,
+      "max_lr": 1e-2,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
   }
 }
