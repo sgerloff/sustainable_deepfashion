@@ -4,7 +4,7 @@ import os
 from src.data.random_pair_dataset_factory import RandomPairDatasetFactory
 from src.instruction_utility import *
 
-from src.metrics.top_k_from_dataset import TopKAccuracy
+from src.metrics.top_k_from_dataset import TopKAccuracy, VAETopKAccuracy
 
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras import backend as K
@@ -179,14 +179,16 @@ class TopKValidation(tf.keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         if epoch % self.epoch_frequency == 0:
-            topk = TopKAccuracy(self.model, self.dataset)
-            top_k_accuracies = topk.get_top_k_accuracies(k_list=self.k_list)
+            top_k_accuracies = self.get_top_k_accuracies()
             self.print_info(top_k_accuracies)
             if self.best_model_filepath is not None:
                 self.save_best_weights(top_k_accuracies)
 
             self.top_k_log[epoch] = top_k_accuracies
 
+    def get_top_k_accuracies(self):
+        topk = TopKAccuracy(self.model, self.dataset)
+        return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def print_info(self, top_k_accuracies):
         info = " validation: "
@@ -202,9 +204,14 @@ class TopKValidation(tf.keras.callbacks.Callback):
     def get_log(self):
         return self.top_k_log
 
+class VAETopKValidation(TopKValidation):
+    def get_top_k_accuracies(self):
+        topk = VAETopKAccuracy(self.model, self.dataset)
+        return topk.get_top_k_accuracies(k_list=self.k_list)
+
 
 if __name__ == "__main__":
-    ip = InstructionParser("simple_conv2d.json")
+    ip = InstructionParser("VAE_conv2d.json")
     model = ip.get_model()
 
     train_dataset = ip.get_train_dataset()

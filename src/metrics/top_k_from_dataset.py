@@ -8,10 +8,13 @@ class TopKAccuracy:
         self.model = model
         self.dataset = dataset
 
-        self.prediction = self.model.predict(self.dataset)
+        self.prediction = self.get_prediction()
         self.labels = np.concatenate([y for x, y in self.dataset], axis=0)
         
         self.top_k = {}
+
+    def get_prediction(self):
+        return self.model.predict(self.dataset)
 
     def get_top_k_accuracies(self, k_list=[1,5,10]):
         self.top_k = {}
@@ -41,7 +44,10 @@ class TopKAccuracy:
             self.top_k[key] = value/self.prediction.shape[0]
         return self.top_k
 
-
+class VAETopKAccuracy(TopKAccuracy):
+    def get_prediction(self):
+        _, _, prediction = self.model.predict(self.dataset)
+        return prediction
 
 if __name__ == "__main__":
     metadata_file = "simple_conv2d_embedding_size_32.meta"
