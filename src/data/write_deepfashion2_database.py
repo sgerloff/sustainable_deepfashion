@@ -27,9 +27,20 @@ def read_data(path_to_data):
                 ignore_count += 1
     print(f"Found {ignore_count} items with style 0, which we will ignore.")
     df = pd.DataFrame(tmp)
-    duplicate_bool = df.duplicated(subset=["pair_id", "image"])
+
+    #expand bounding boxes
+    box_keys=[]
+    for i in range(4):
+        new_key = "box_" + str(i)
+        df[new_key] = df["bounding_box"].apply(lambda x: x[i])
+        box_keys.append(new_key)
+
+    subset = ["pair_id", "image"]
+    subset.extend(box_keys)
+
+    duplicate_bool = df.duplicated(subset=subset)
     print(f"Found {len(df[duplicate_bool])} duplicated entries, which we will drop")
-    return df[~duplicate_bool]
+    return df[~duplicate_bool].drop(columns=box_keys)
 
 
 if __name__ == "__main__":
