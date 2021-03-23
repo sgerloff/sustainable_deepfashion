@@ -17,11 +17,13 @@ def load_instruction(path):
         instruction_ = json.load(file)
     return instruction_
 
+
 def load_metadata(path):
     metadata_file = os.path.join(get_project_dir(), "models", path)
     with open(metadata_file, "r") as file:
         metadata_ = json.load(file)
     return metadata_
+
 
 def load_model_from_metadata(path, compile=True):
     metadata = load_metadata(path)
@@ -44,12 +46,25 @@ def get_compile_kwargs_from_instruction_parser(instruction_parser):
         compile_kwargs["metrics"] = [instruction_parser.get_metric()]
     return compile_kwargs
 
+
 def load_dataframe(path):
     return joblib.load(os.path.join(get_project_dir(), path))
 
 
-def evaluate_values_of_dict(dict_in):
-    return {key: eval(str(value)) for key, value in dict_in.items()}
+def evaluate_list_and_tuples_in_dict(dict_in):
+    for key, value in dict_in.items():
+        if isinstance(value, str):
+            if string_is_list(value) or string_is_tuple(value):
+                dict_in[key] = eval(value)
+    return dict_in
+
+
+def string_is_list(input):
+    return input.startswith("[") and input.endswith("]")
+
+
+def string_is_tuple(input):
+    return input.startswith("(") and input.endswith(")")
 
 
 class InstructionParser:
@@ -65,13 +80,13 @@ class InstructionParser:
 
             self.model_save_path = None
             self.tensorboard_log_dir = None
+            self.best_top_1_model_path = None
+
             self.metadata_path = None
             self.metadata = None
 
         self.model_factory = self.load_model_factory()
         self.set_basemodel_freeze_ratio()
-
-
 
     def copy_instruction(self):
         if "copy_instruction" in self.instruction.keys():
@@ -83,7 +98,6 @@ class InstructionParser:
 
             self.instruction = parent_instruction
 
-
     def overwrite_values(self, target_dict, source_dict, key):
         if key in target_dict.keys():
             if isinstance(source_dict[key], dict) and isinstance(target_dict[key], dict):
@@ -94,7 +108,6 @@ class InstructionParser:
         else:
             target_dict[key] = source_dict[key]
         return target_dict
-
 
     def set_identifier(self, path):
         basename = os.path.basename(path)
@@ -108,7 +121,7 @@ class InstructionParser:
             return identifier
 
     def load_model_factory(self):
-        self.instruction["model"]["kwargs"] = evaluate_values_of_dict(self.instruction["model"]["kwargs"])
+        self.instruction["model"]["kwargs"] = evaluate_list_and_tuples_in_dict(self.instruction["model"]["kwargs"])
         return instance_from_string(
             self.instruction["model"]["factory"])(**self.instruction["model"]["kwargs"])
 
@@ -167,14 +180,19 @@ class InstructionParser:
     def get_callbacks(self):
         callbacks = []
         for key in self.instruction["callbacks"].keys():
+            self.instruction["callbacks"][key] = evaluate_list_and_tuples_in_dict(self.instruction["callbacks"][key])
+
             self.instruction["callbacks"][key] = self.replace_default_filename_in_kwargs(
                 self.instruction["callbacks"][key])
+
             callback = instance_from_string(key)(**self.instruction["callbacks"][key])
 
             if key == "src.models.callbacks.Checkpoint":
                 self.model_save_path = callback.filepath
             if key == "src.models.callbacks.Tensorboard":
                 self.tensorboard_log_dir = callback.log_dir
+            if key == "src.models.callbacks.TopKValidation":
+                self.best_top_1_model_path = callback.best_model_filepath
 
             callbacks.append(callback)
         return callbacks
@@ -191,14 +209,16 @@ class InstructionParser:
         cmd = cmd.replace("__default_filename__", self.identifier)
         return cmd
 
-    def write_metadata(self):
+    def write_metadata(self, logs=None):
         if self.model_save_path is not None:
             self.metadata_path = self.get_metadata_path(self.identifier)
             self.metadata = {
                 "saved_model": remove_project_dir(self.model_save_path),
                 "tensorboard_log_dir": remove_project_dir(self.tensorboard_log_dir),
+                "best_top_1_model": remove_project_dir(self.best_top_1_model_path),
                 "git_commit": subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"),
-                "instruction": self.instruction
+                "instruction": self.instruction,
+                "logs": logs
             }
             with open(self.metadata_path, "w") as file:
                 json.dump(self.metadata, file, indent=4)
@@ -208,13 +228,14 @@ class InstructionParser:
         return os.path.join(get_project_dir(), "models", identifier + ".meta")
 
     def zip_results(self):
-        shutil.make_archive(self.identifier, "zip", base_dir=self.metadata["tensorboard_log_dir"], root_dir=get_project_dir())
+        shutil.make_archive(self.identifier, "zip", base_dir=self.metadata["tensorboard_log_dir"],
+                            root_dir=get_project_dir())
         with zipfile.ZipFile(self.identifier + ".zip", "a") as zipf:
             zipf.write(remove_project_dir(self.metadata_path))
             zipf.write(self.metadata["saved_model"])
 
 
 if __name__ == "__main__":
-    ip = InstructionParser("efficientnetb0_frozen.json")
+    ip = InstructionParser("test_new_callback.json")
     callbacks = ip.get_callbacks()
     print(callbacks[0])

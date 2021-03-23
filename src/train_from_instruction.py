@@ -9,7 +9,7 @@ if __name__ == "__main__":
                     'training environment, train the model, and allows '
                     'to execute bash commands after finishing.')
     parser.add_argument('--instruction', type=str,
-                        default='simple_conv2d.json',
+                        default='test_new_callback.json',
                         help='relative path to instructions from <project>/instructions/')
 
     args = parser.parse_args()
@@ -31,7 +31,16 @@ if __name__ == "__main__":
                         callbacks=callbacks,
                         **instruction_parser.get_fit_kwargs())
 
-    instruction_parser.write_metadata()
+    logs = {
+        "history": history.history
+    }
+
+    for c in callbacks:
+        get_log = getattr(c, "get_log", None)
+        if callable(get_log):
+            logs[c.__class__.__name__] = get_log()
+
+    instruction_parser.write_metadata(logs=logs)
     instruction_parser.zip_results()
 
     clean_cmd = instruction_parser.get_cleanup_cmd()

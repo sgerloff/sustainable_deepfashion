@@ -4,7 +4,7 @@ import os
 from src.data.random_pair_dataset_factory import RandomPairDatasetFactory
 from src.instruction_utility import *
 
-from src.metrics.top_k_from_dataset import TopKAccuracyLoop
+from src.metrics.top_k_from_dataset import TopKAccuracy
 
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras import backend as K
@@ -154,43 +154,74 @@ class CyclicLR(Callback):
 
 
 class TopKValidation(tf.keras.callbacks.Callback):
-    def __init__(self, dataset, epoch_frequency=10, saved_weights_path=None):
+    def __init__(self, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+                 epoch_frequency=10,
+                 best_model_filepath=None,
+                 k_list=[1,5,10]):
         super().__init__()
-        self.dataset = dataset
+        self.dataset = self.get_dataset(dataframe)
 
-        self.saved_weights = saved_weights_path
+        self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
+        self.k_list = k_list
+        #Ensure that we track top-1
+        if 1 not in self.k_list:
+            self.k_list.append(1)
 
         self.epoch_frequency = epoch_frequency
         self.best_top_k = 0.
 
+        self.top_k_log = {}
+
+    def get_dataset(self, dataframe_path):
+        validation_df = load_dataframe(dataframe_path)
+        factory = RandomPairDatasetFactory(validation_df)
+        return factory.get_dataset(batch_size=16, shuffle=False)
+
     def on_epoch_end(self, epoch, logs=None):
         if epoch % self.epoch_frequency == 0:
-            topk = TopKAccuracyLoop(self.model, self.dataset)
-            # top1 = topk.get_top_k_accuracy(1)
-            print(f"\n{topk.get_top_k_accuracies(k_list=[1,5,10])}")
+            topk = TopKAccuracy(self.model, self.dataset)
+            top_k_accuracies = topk.get_top_k_accuracies(k_list=self.k_list)
+            self.print_info(top_k_accuracies)
+            if self.best_model_filepath is not None:
+                self.save_best_weights(top_k_accuracies)
+
+            self.top_k_log[epoch] = top_k_accuracies
 
 
-    def save_best_weights(self, top_1_accuracy):
-        if top_1_accuracy >= self.best_top_k:
-            pass
+    def print_info(self, top_k_accuracies):
+        info = " validation: "
+        for key, value in top_k_accuracies.items():
+            info = info + f"{key} = {value:0.4f}; "
+        print(info)
+
+    def save_best_weights(self, top_k_accuracies):
+        if top_k_accuracies["top_1"] >= self.best_top_k:
+            self.best_top_k = top_k_accuracies["top_1"]
+            self.model.save_weights(self.best_model_filepath)
+
+    def get_log(self):
+        return self.top_k_log
 
 
 if __name__ == "__main__":
     ip = InstructionParser("simple_conv2d.json")
     model = ip.get_model()
 
-    validation_df = load_dataframe("data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib")
-
-    factory = RandomPairDatasetFactory(validation_df)
-    dataset = factory.get_dataset(batch_size=16, shuffle=True)
-
     train_dataset = ip.get_train_dataset()
     model.compile(
         loss=ip.get_loss(),
         optimizer=ip.get_optimizer()
     )
+
+    top_k_callback = TopKValidation(dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+                                    epoch_frequency=1,
+                                    best_model_filepath="test_top_k_callback"
+                                    )
+
     model.fit(train_dataset,
-              epochs=2,
+              epochs=10,
               steps_per_epoch=2,
-              callbacks=[TopKValidation(dataset, epoch_frequency=1)]
+              callbacks=[top_k_callback]
               )
+
+    print(top_k_callback.get_log())
