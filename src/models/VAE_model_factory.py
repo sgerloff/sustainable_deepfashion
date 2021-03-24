@@ -49,7 +49,7 @@ class VAEModelFactory:
         return VAE(encoder, decoder)
 
     def preprocessor(self):
-        return lambda x: x
+        return tf.keras.applications.imagenet_utils.preprocess_input
 
 
 class VAE(models.Model):
