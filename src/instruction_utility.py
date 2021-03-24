@@ -179,7 +179,7 @@ class InstructionParser:
             ratio = self.instruction["model"]["basemodel_freeze_ratio"]
 
         if ratio is not None:
-            model = savely_unfreeze_layers_of_model(model, ratio)
+            model.layers[1] = savely_unfreeze_layers_of_model(model.layers[1], ratio)
         return model
 
     def get_loss(self):
@@ -264,6 +264,5 @@ class InstructionParser:
 
 
 if __name__ == "__main__":
-    ip = InstructionParser("test_new_callback.json")
-    callbacks = ip.get_callbacks()
-    print(callbacks[0])
+    ip = InstructionParser("mobilenet_v2_unfreeze_ratio_0.5.json")
+    model = ip.get_model()
