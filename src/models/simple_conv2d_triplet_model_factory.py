@@ -42,6 +42,9 @@ class SimpleConv2DTripletModelFactory(TripletModelFactory):
         for n in self.size_dense_layers:
             embedding_model.add(tf.keras.layers.Dense(n, activation="relu"))
 
+    def preprocessor(self):
+        return tf.keras.applications.imagenet_utils.preprocess_input
+
 
 class SimpleConv2DDropoutAndBatchNormalizationTripletModelFactory(SimpleConv2DTripletModelFactory):
     def __init__(self,

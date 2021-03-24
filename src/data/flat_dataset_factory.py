@@ -28,7 +28,6 @@ class FlatDatasetFactory:
         img = tf.io.decode_jpeg(img, channels=3)
         img = tf.image.resize(img, [self.input_shape[0], self.input_shape[1]])
         img = tf.image.convert_image_dtype(img, dtype=tf.float32)
-        img = img/255.
         return img, label
 
 
