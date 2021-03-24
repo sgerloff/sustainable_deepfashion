@@ -215,11 +215,16 @@ class InstructionParser:
 
             if key == "src.models.callbacks.TopKValidation":
                 self.instruction["callbacks"][key]["preprocessor"] = self.model_factory.preprocessor()
+            if key == "src.models.callbacks.VAETopKValidation":
+                self.instruction["callbacks"][key]["preprocessor"] = self.model_factory.preprocessor()
 
             callback = instance_from_string(key)(**self.instruction["callbacks"][key])
 
             if key == "src.models.callbacks.TopKValidation":
                 self.best_top_1_model_path = callback.best_model_filepath
+            if key == "src.models.callbacks.VAETopKValidation":
+                self.best_top_1_model_path = callback.best_model_filepath
+
             if key == "src.models.callbacks.Checkpoint":
                 self.model_save_path = callback.filepath
             if key == "src.models.callbacks.Tensorboard":
