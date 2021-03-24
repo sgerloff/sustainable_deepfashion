@@ -8,7 +8,7 @@ from src.data.VAE_dataset_factory import VAEDatasetFactory
 
 
 class VAEModelFactory:
-    def __init__(self, input_shape=(224, 224, 3), latent_dim=3, filters_per_conv_layer=[8, 16, 32, 64, 128, 256, 512, 1024]):
+    def __init__(self, input_shape=(224, 224, 3), latent_dim=32, filters_per_conv_layer=[8, 16, 32, 64, 128, 256, 512, 1024]):
         self.input_shape = input_shape
         self.latent_dim = latent_dim
         self.filters_per_conv_layer = filters_per_conv_layer
