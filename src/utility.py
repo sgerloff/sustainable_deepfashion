@@ -23,6 +23,27 @@ def get_hashsum_of_file(path_to_file):
             sha256.update(data)
     return sha256.hexdigest()
 
+def savely_unfreeze_layers_of_model(model, ratio):
+    """
+    Freezes the first 100*ratio percent of the layers
+    of the model. The remaining layers are set to
+    trainable. BatchNormalization layers are frozen to
+    prevent loss of pretrained weights.
+    """
+
+    model.trainable = True
+
+    ratio_index = int(ratio * len(model.layers))
+
+    for layer in model.layers[:ratio_index]:
+        layer.trainable = False
+    for layer in model.layers[ratio_index:]:
+        if layer.__class__.__name__ == "BatchNormalization":
+            layer.trainable = False
+        else:
+            layer.trainable = True
+    return model
+
 
 def draw_bbox(path2image, bounding_box, color=(255, 255, 0), thickness=3):
     """    

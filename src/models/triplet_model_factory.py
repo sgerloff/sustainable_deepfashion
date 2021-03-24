@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+from src.utility import savely_unfreeze_layers_of_model
 
 class TripletModelFactory:
     def __init__(self, input_shape=(224, 224, 3)):
@@ -14,24 +14,7 @@ class TripletModelFactory:
         pass
 
     def set_basemodel_freeze_ratio(self, ratio):
-        """
-        Freezes the first 100*ratio percent of the layers
-        of the basemodel. The remaining layers are set to
-        trainable. BatchNormalization layers are frozen to
-        prevent loss of pretrained weights.
-        """
-
-        self.basemodel.trainable = True
-
-        ratio_index = int(ratio * len(self.basemodel.layers))
-
-        for layer in self.basemodel.layers[:ratio_index]:
-            layer.trainable = False
-        for layer in self.basemodel.layers[ratio_index:]:
-            if layer.__class__.__name__ == "BatchNormalization":
-                layer.trainable = False
-            else:
-                layer.trainable = True
+        self.basemodel = savely_unfreeze_layers_of_model(self.basemodel, ratio)
 
     def get_model(self):
         input_image = tf.keras.layers.Input(self.input_shape)

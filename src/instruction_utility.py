@@ -1,6 +1,6 @@
 import joblib, json, os, subprocess, zipfile, shutil
 
-from src.utility import get_project_dir, remove_project_dir
+from src.utility import get_project_dir, remove_project_dir, savely_unfreeze_layers_of_model
 
 
 def instance_from_string(module_path):
@@ -85,8 +85,12 @@ class InstructionParser:
             self.metadata_path = None
             self.metadata = None
 
-        self.model_factory = self.load_model_factory()
-        self.set_basemodel_freeze_ratio()
+            self.to_load_weights = None
+
+        if self.instruction["model"]["load"] == "None":
+            self.model_factory = self.load_model_factory()
+        else:
+            self.model_factory = self.load_model_factory_from_metafile()
 
     def copy_instruction(self):
         if "copy_instruction" in self.instruction.keys():
@@ -122,16 +126,27 @@ class InstructionParser:
 
     def load_model_factory(self):
         self.instruction["model"]["kwargs"] = evaluate_list_and_tuples_in_dict(self.instruction["model"]["kwargs"])
-        return instance_from_string(
-            self.instruction["model"]["factory"])(**self.instruction["model"]["kwargs"])
+        self.model_factory = instance_from_string(
+            self.instruction["model"]["factory"]
+        )(**self.instruction["model"]["kwargs"])
 
-    def set_basemodel_freeze_ratio(self):
+        self.set_model_factory_basemodel_freeze_ratio()
+        return self.model_factory
+
+    def set_model_factory_basemodel_freeze_ratio(self):
         ratio = None
         if "basemodel_freeze_ratio" in self.instruction["model"].keys():
             ratio = self.instruction["model"]["basemodel_freeze_ratio"]
 
         if ratio is not None:
             self.model_factory.set_basemodel_freeze_ratio(ratio)
+
+    def load_model_factory_from_metafile(self):
+        metadata = load_metadata(self.instruction["model"]["load"])
+        instruction_parser_from_meta = InstructionParser(metadata["instruction"], is_dict=True)
+
+        self.to_load_weights = os.path.join(get_project_dir(), metadata["saved_model"])
+        return instruction_parser_from_meta.model_factory
 
     def load_dataset(self, dataset_instruction):
         dataframe = load_dataframe(dataset_instruction["dataframe"])
@@ -152,7 +167,20 @@ class InstructionParser:
             return self.load_dataset(self.instruction["validation_data"])
 
     def get_model(self):
-        return self.model_factory.get_model()
+        model = self.model_factory.get_model()
+        if self.instruction["model"]["load"] != "None":
+            model.load_weights(self.to_load_weights)
+            model = self.apply_basemodel_freeze_ratio(model)
+        return model
+
+    def apply_basemodel_freeze_ratio(self, model):
+        ratio = None
+        if "basemodel_freeze_ratio" in self.instruction["model"].keys():
+            ratio = self.instruction["model"]["basemodel_freeze_ratio"]
+
+        if ratio is not None:
+            model = savely_unfreeze_layers_of_model(model, ratio)
+        return model
 
     def get_loss(self):
         if self.instruction["loss"] != "None":
