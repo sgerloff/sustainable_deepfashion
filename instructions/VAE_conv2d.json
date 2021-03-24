@@ -33,7 +33,7 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 1e-4
+      "learning_rate": 3e-5
     }
   },
   "metric": "None",
