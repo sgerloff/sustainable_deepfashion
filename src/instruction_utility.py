@@ -220,7 +220,6 @@ class InstructionParser:
 
             if key == "src.models.callbacks.TopKValidation":
                 self.best_top_1_model_path = callback.best_model_filepath
-                self.instruction["callbacks"][key]["preprocessor"] = self.model_factory.preprocessor()
             if key == "src.models.callbacks.Checkpoint":
                 self.model_save_path = callback.filepath
             if key == "src.models.callbacks.Tensorboard":
@@ -265,8 +264,11 @@ class InstructionParser:
         with zipfile.ZipFile(self.identifier + ".zip", "a") as zipf:
             zipf.write(remove_project_dir(self.metadata_path))
             zipf.write(self.metadata["saved_model"])
+            if self.best_top_1_model_path is not None:
+                zipf.write(remove_project_dir(self.best_top_1_model_path))
 
 
 if __name__ == "__main__":
     ip = InstructionParser("mobilenet_v2_unfreeze_ratio_0.5.json")
     model = ip.get_model()
+    ip.get_callbacks()

@@ -157,9 +157,10 @@ class TopKValidation(tf.keras.callbacks.Callback):
     def __init__(self, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
                  epoch_frequency=10,
                  best_model_filepath=None,
-                 k_list=[1,5,10]):
+                 k_list=[1,5,10],
+                 preprocessor=(lambda x:x)):
         super().__init__()
-        self.dataset = self.get_dataset(dataframe)
+        self.dataset = self.get_dataset(dataframe, preprocessor)
 
         self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
         self.k_list = k_list
@@ -172,9 +173,9 @@ class TopKValidation(tf.keras.callbacks.Callback):
 
         self.top_k_log = {}
 
-    def get_dataset(self, dataframe_path):
+    def get_dataset(self, dataframe_path, preprocessor):
         validation_df = load_dataframe(dataframe_path)
-        factory = RandomPairDatasetFactory(validation_df)
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
     def on_epoch_end(self, epoch, logs=None):
