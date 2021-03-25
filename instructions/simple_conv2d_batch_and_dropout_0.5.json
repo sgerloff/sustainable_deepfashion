@@ -15,5 +15,13 @@
     "kwargs": {
       "epochs": 50
     }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-4,
+      "max_lr": 1e2,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
   }
 }
