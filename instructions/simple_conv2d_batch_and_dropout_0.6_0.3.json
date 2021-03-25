@@ -1,0 +1,14 @@
+{
+  "copy_instruction": "simple_conv2d.json",
+  "model": {
+    "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DDropoutAndBatchNormalizationTripletModelFactory",
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 16,
+      "filters_per_conv_layer": "[16,32,64,128,256]",
+      "batch_norm_bool": "[True, True, True, True, True]",
+      "size_dense_layers": "[512, 256]",
+      "dense_dropout_ratios": "[0.6, 0.3]"
+    }
+  }
+}

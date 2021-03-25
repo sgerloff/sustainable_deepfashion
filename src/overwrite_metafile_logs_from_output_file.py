@@ -32,9 +32,9 @@ class TripletModelOutputParser:
         loss = []
         top_k_validation = {}
         for i, epoch in enumerate(self.end_of_epochs):
-            loss.append(re.search(self.loss_pattern, epoch).group(0))
+            loss.append(eval(re.search(self.loss_pattern, epoch).group(0)))
             top_k_validation[i + 1] = {
-                key: re.search(pattern, epoch).group(0) for key, pattern in self.top_k_patterns.items()
+                key: eval(re.search(pattern, epoch).group(0)) for key, pattern in self.top_k_patterns.items()
             }
         logs = {
             "history": {
