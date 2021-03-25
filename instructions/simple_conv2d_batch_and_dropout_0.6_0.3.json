@@ -10,5 +10,10 @@
       "size_dense_layers": "[512, 256]",
       "dense_dropout_ratios": "[0.6, 0.3]"
     }
+  },
+  "fit": {
+    "kwargs": {
+      "epochs": 50
+    }
   }
 }

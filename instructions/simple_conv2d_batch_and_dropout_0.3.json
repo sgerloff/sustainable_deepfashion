@@ -9,6 +9,11 @@
       "batch_norm_bool": "[True, True, True, True, True]",
       "size_dense_layers": "[512, 256]",
       "dense_dropout_ratios": "[0.3, 0.3]"
+    },
+    "fit": {
+      "kwargs": {
+        "epochs": 50
+      }
     }
   }
 }
