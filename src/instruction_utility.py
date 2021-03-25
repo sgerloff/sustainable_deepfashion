@@ -220,7 +220,7 @@ class InstructionParser:
 
             callback = instance_from_string(key)(**kwargs)
 
-            if key == ["src.models.callbacks.TopKValidation", "src.models.callbacks.VAETopKValidation"]:
+            if key in ["src.models.callbacks.TopKValidation", "src.models.callbacks.VAETopKValidation"]:
                 self.best_top_1_model_path = callback.best_model_filepath
             if key == "src.models.callbacks.Checkpoint":
                 self.model_save_path = callback.filepath
