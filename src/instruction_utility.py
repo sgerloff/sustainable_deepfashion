@@ -213,7 +213,7 @@ class InstructionParser:
             self.instruction["callbacks"][key] = self.replace_default_filename_in_kwargs(
                 self.instruction["callbacks"][key])
 
-            kwargs = self.instruction["callbacks"][key]
+            kwargs = self.instruction["callbacks"][key].copy()
 
             if key in ["src.models.callbacks.TopKValidation", "src.models.callbacks.VAETopKValidation"]:
                 kwargs["preprocessor"] = self.model_factory.preprocessor()
