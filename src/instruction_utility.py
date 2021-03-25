@@ -213,10 +213,11 @@ class InstructionParser:
             self.instruction["callbacks"][key] = self.replace_default_filename_in_kwargs(
                 self.instruction["callbacks"][key])
 
+            kwargs = self.instruction["callbacks"][key]
             if key == "src.models.callbacks.TopKValidation":
-                self.instruction["callbacks"][key]["preprocessor"] = self.model_factory.preprocessor()
+                kwargs["preprocessor"] = self.model_factory.preprocessor()
 
-            callback = instance_from_string(key)(**self.instruction["callbacks"][key])
+            callback = instance_from_string(key)(**kwargs)
 
             if key == "src.models.callbacks.TopKValidation":
                 self.best_top_1_model_path = callback.best_model_filepath
