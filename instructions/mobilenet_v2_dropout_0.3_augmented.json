@@ -1,5 +1,8 @@
 {
   "copy_instruction": "efficientnetb0_frozen.json",
+  "train_data": {
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory"
+  },
   "model": {
     "factory": "src.models.mobile_net_triplet_model_factory.MobileNetV2DropoutTripletModelFactory",
     "basemodel_freeze_ratio": 1.0,

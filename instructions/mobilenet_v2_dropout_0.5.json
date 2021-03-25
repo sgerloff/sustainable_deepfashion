@@ -17,8 +17,8 @@
   },
   "callbacks": {
     "src.models.callbacks.CyclicLR": {
-      "base_lr": 1e-5,
-      "max_lr": 1e-3,
+      "base_lr": 1e-3,
+      "max_lr": 1e1,
       "step_size": 5184,
       "mode": "exp_range"
     }
