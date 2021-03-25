@@ -43,7 +43,7 @@ class SimpleConv2DTripletModelFactory(TripletModelFactory):
             embedding_model.add(tf.keras.layers.Dense(n, activation="relu"))
 
     def preprocessor(self):
-        return tf.keras.applications.imagenet_utils.preprocess_input
+        return (lambda x: (x/127.5)-1.)
 
 
 class SimpleConv2DDropoutAndBatchNormalizationTripletModelFactory(SimpleConv2DTripletModelFactory):
