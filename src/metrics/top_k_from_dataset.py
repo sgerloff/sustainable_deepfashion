@@ -48,6 +48,7 @@ class TopKAccuracy:
             cosine_similarity = np.matmul(self.prediction, np.reshape(self.prediction[index], (-1, 1)))
             distances = 1. - cosine_similarity
             distances = np.maximum(distances, 0.0)
+            distances = distances.flatten()
         else:
             print(f"Unknown distance metric: {self.distance_metric}")
         sorted_index = np.argsort(distances)
@@ -67,7 +68,7 @@ class VAETopKAccuracy(TopKAccuracy):
 
 
 if __name__ == "__main__":
-    metadata_file = "simple_conv2d_embedding_size_32.meta"
+    metadata_file = "simple_conv2d.meta"
     metadata = load_metadata(metadata_file)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
     model = load_model_from_metadata(metadata_file)
