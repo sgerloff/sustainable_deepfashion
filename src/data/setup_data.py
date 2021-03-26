@@ -30,7 +30,8 @@ def fetch_data(id_str):
     deepfashion_sha256 = {
         "train": "ec6f5d83f896f3abbb46bcfb9fdd6b9f544c0585344f862c214f6de899c495c7",
         "validation": "edabbdb57fae4b5039ff06e436cc0dfa15326424244bfac938e4a4d6f8db0259",
-        "test": "1a85367dc9c75fbac8645e397b93af11c86bc059ab718c1eee31b559b5b4598b"
+        "test": "1a85367dc9c75fbac8645e397b93af11c86bc059ab718c1eee31b559b5b4598b",
+        "data-dsr": "d0072f3be3e286b4fcfa46ba670d32ba677b39c307654d804b43f9b9e1100072"
     }
 
     target_path = os.path.join(utl.get_project_dir(), "data", "raw", id_str + ".zip")

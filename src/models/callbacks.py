@@ -197,7 +197,7 @@ class TopKValidation(tf.keras.callbacks.Callback):
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def print_info(self, top_k_accuracies):
-        info = f" validation: {self.distance_metric}"
+        info = f" validation [metric={self.distance_metric}]:"
         for key, value in top_k_accuracies.items():
             info = info + f"{key} = {value:0.4f}; "
         print(info)
