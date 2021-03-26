@@ -8,29 +8,27 @@ from src.data.VAE_dataset_factory import VAEDatasetFactory
 
 
 class VAEModelFactory:
-    def __init__(self, input_shape=(224, 224, 3), latent_dim=32,
-                 filters_per_conv_layer=[8, 16, 32, 64, 128, 256, 512, 1024]):
+    def __init__(self, input_shape=(224, 224, 3), latent_dim=256,
+                 filters_per_conv_layer=[32, 64, 128, 256, 512]):
         self.input_shape = input_shape
         self.latent_dim = latent_dim
         self.filters_per_conv_layer = filters_per_conv_layer
-        self.bridge_shape = (self.input_shape[0] // 2 ** (len(self.filters_per_conv_layer) // 2),
-                             self.input_shape[1] // 2 ** (len(self.filters_per_conv_layer) // 2),
+        self.bridge_shape = (self.input_shape[0] // 2 ** (len(self.filters_per_conv_layer)),
+                             self.input_shape[1] // 2 ** (len(self.filters_per_conv_layer)),
                              self.filters_per_conv_layer[-1])
 
     def get_model(self):
         encoder_inputs = layers.Input(shape=self.input_shape)
         x = layers.Conv2D(self.filters_per_conv_layer[0], kernel_size=3, strides=2, padding='same', activation='relu')(
             encoder_inputs)
-        x = layers.Conv2D(self.filters_per_conv_layer[1], kernel_size=3, padding='same', activation='relu')(x)
+        x = layers.Conv2D(self.filters_per_conv_layer[1], kernel_size=3, strides=2, padding='same', activation='relu')(
+            x)
         x = layers.Conv2D(self.filters_per_conv_layer[2], kernel_size=3, strides=2, padding='same', activation='relu')(
             x)
-        x = layers.Conv2D(self.filters_per_conv_layer[3], kernel_size=3, padding='same', activation='relu')(x)
+        x = layers.Conv2D(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same', activation='relu')(
+            x)
         x = layers.Conv2D(self.filters_per_conv_layer[4], kernel_size=3, strides=2, padding='same', activation='relu')(
             x)
-        x = layers.Conv2D(self.filters_per_conv_layer[5], kernel_size=3, padding='same', activation='relu')(x)
-        x = layers.Conv2D(self.filters_per_conv_layer[6], kernel_size=3, strides=2, padding='same', activation='relu')(
-            x)
-        x = layers.Conv2D(self.filters_per_conv_layer[7], kernel_size=3, padding='same', activation='relu')(x)
         x = layers.Flatten()(x)
         x = layers.Dense(2 * self.latent_dim, activation='relu')(x)
         z_mean = layers.Dense(self.latent_dim, name='z_mean')(x)
@@ -41,18 +39,15 @@ class VAEModelFactory:
         latent_inputs = layers.Input(shape=(self.latent_dim,))
         x = layers.Dense(np.prod(self.bridge_shape), activation='relu')(latent_inputs)
         x = layers.Reshape(self.bridge_shape)(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[6], kernel_size=3, strides=2, padding='same',
+        x = layers.Conv2DTranspose(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same',
                                    activation='relu')(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[5], kernel_size=3, padding='same', activation='relu')(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[4], kernel_size=3, strides=2, padding='same',
-                                   activation='relu')(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[3], kernel_size=3, padding='same', activation='relu')(x)
         x = layers.Conv2DTranspose(self.filters_per_conv_layer[2], kernel_size=3, strides=2, padding='same',
                                    activation='relu')(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[1], kernel_size=3, padding='same', activation='relu')(x)
+        x = layers.Conv2DTranspose(self.filters_per_conv_layer[1], kernel_size=3, strides=2, padding='same',
+                                   activation='relu')(x)
         x = layers.Conv2DTranspose(self.filters_per_conv_layer[0], kernel_size=3, strides=2, padding='same',
                                    activation='relu')(x)
-        decoder_outputs = layers.Conv2DTranspose(3, 3, activation='sigmoid', padding='same')(x)
+        decoder_outputs = layers.Conv2DTranspose(3, 3, strides=2, activation='sigmoid', padding='same')(x)
         decoder = models.Model(latent_inputs, decoder_outputs, name="decoder")
 
         return VAE(encoder, decoder)
