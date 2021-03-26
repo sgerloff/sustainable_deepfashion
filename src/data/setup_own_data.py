@@ -10,7 +10,7 @@ def initialize_dataframe():
                                'occlusion', 'category_name', 'image', 'pair_id', 'source'])
     return df
 
-def write_database_and_resize_images(target_path, output_shape=(448, 448)):
+def write_database_and_resize_images(target_path, output_shape=(224, 224)):
     df = initialize_dataframe()
 
     path = os.path.join(get_project_dir(), 'data', 'raw-data-dsr', 'pair-directories')
@@ -52,7 +52,7 @@ def get_project_dir():
 
 if __name__ == '__main__':
     target_path = os.path.join(get_project_dir(), 'data', 'data-dsr', 'pair-directories')
-    df = write_database_and_resize_images(target_path, output_shape=(448, 448))
+    df = write_database_and_resize_images(target_path, output_shape=(224, 224))
     output_path = os.path.join(get_project_dir(), 'data', 'data-dsr', 'own_dataframe.joblib')
     joblib.dump(df, output_path)
 

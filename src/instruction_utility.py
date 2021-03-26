@@ -169,8 +169,13 @@ class InstructionParser:
     def get_model(self):
         model = self.model_factory.get_model()
         if self.instruction["model"]["load"] != "None":
-            model.load_weights(self.to_load_weights)
-            model = self.apply_basemodel_freeze_ratio(model)
+            if self.model_factory.__class__.__name__ == "VAEModelFactory":
+                model.compile(optimizer=self.get_optimizer())
+                model.built = True
+                model.load_weights(self.to_load_weights)
+            else:
+                model.load_weights(self.to_load_weights)
+                model = self.apply_basemodel_freeze_ratio(model)
         return model
 
     def apply_basemodel_freeze_ratio(self, model):
