@@ -168,6 +168,8 @@ class TopKValidation(tf.keras.callbacks.Callback):
         if 1 not in self.k_list:
             self.k_list.append(1)
 
+        self.distance_metric = "L2"
+
         self.epoch_frequency = epoch_frequency
         self.best_top_k = 0.
 
@@ -189,15 +191,13 @@ class TopKValidation(tf.keras.callbacks.Callback):
 
     def get_top_k_accuracies(self):
         if hasattr(self.model.loss, "_fn_kwargs"):
-            distance_metric = self.model.loss._fn_kwargs["distance_metric"]
-        else:
-            distance_metric = "L2"
+            self.distance_metric = self.model.loss._fn_kwargs["distance_metric"]
 
-        topk = TopKAccuracy(self.model, self.dataset, distance_metric=distance_metric)
+        topk = TopKAccuracy(self.model, self.dataset, distance_metric=self.distance_metric)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def print_info(self, top_k_accuracies):
-        info = " validation: "
+        info = f" validation: {self.distance_metric}"
         for key, value in top_k_accuracies.items():
             info = info + f"{key} = {value:0.4f}; "
         print(info)
