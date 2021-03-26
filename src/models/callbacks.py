@@ -188,7 +188,12 @@ class TopKValidation(tf.keras.callbacks.Callback):
             self.top_k_log[epoch] = top_k_accuracies
 
     def get_top_k_accuracies(self):
-        topk = TopKAccuracy(self.model, self.dataset)
+        if hasattr(self.model.loss, "_fn_kwargs"):
+            distance_metric = self.model.loss._fn_kwargs["distance_metric"]
+        else:
+            distance_metric = "L2"
+
+        topk = TopKAccuracy(self.model, self.dataset, distance_metric=distance_metric)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def print_info(self, top_k_accuracies):
@@ -212,12 +217,12 @@ class VAETopKValidation(TopKValidation):
 
 
 if __name__ == "__main__":
-    ip = InstructionParser("VAE_conv2d.json")
+    ip = InstructionParser("simple_conv2d.json")
     model = ip.get_model()
 
     train_dataset = ip.get_train_dataset()
     model.compile(
-        # loss=ip.get_loss(),
+        loss=ip.get_loss(),
         optimizer=ip.get_optimizer()
     )
 

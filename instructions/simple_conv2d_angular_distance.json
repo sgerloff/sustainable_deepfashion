@@ -1,0 +1,9 @@
+{
+  "copy_instruction": "simple_conv2d.json",
+  "loss": {
+    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
+    "kwargs": {
+      "distance_metric": "angular"
+    }
+  }
+}
