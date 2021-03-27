@@ -3,5 +3,9 @@ argparse
 pandas
 tqdm
 keras
+matplotlib
 tensorflow
+tensorflow-addons
 numpy
+requests
+zipfile38

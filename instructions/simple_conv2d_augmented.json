@@ -1,0 +1,6 @@
+{
+  "copy_instruction": "simple_conv2d.json",
+  "train_data": {
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory"
+  }
+}

@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<minder version="1.9.2">
+  <theme name="default" label="Default" index="7"/>
+  <styles>
+    <style level="0" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="1" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="2" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="3" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="4" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="5" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="6" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="7" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="8" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="9" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="10" isset="true" linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+  </styles>
+  <drawarea x="-354.9559999965129" y="82.267799999565341" scale="1"/>
+  <images/>
+  <nodes>
+    <node id="0" posx="612.9559999965129" posy="266.73220000043443" maxwidth="200" width="191" height="70" side="left" fold="false" treesize="70" layout="Horizontal">
+      <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Sustainable Fashion (Current State)</nodename>
+      <nodenote></nodenote>
+    </node>
+    <node id="5" posx="1116.9559999965131" posy="819.23220000043557" maxwidth="200" width="153" height="49" side="left" fold="false" treesize="686" layout="Horizontal">
+      <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Code Prototype</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="24" posx="882.9559999965129" posy="633.73220000043557" maxwidth="200" width="134" height="49" side="left" fold="false" treesize="238" color="#7a36b1" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Infrastructure</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="25" posx="588.9559999965129" posy="539.23220000043557" maxwidth="200" width="194" height="70" side="left" fold="false" treesize="70" color="#7a36b1" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Setup the training on google colab</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="26" posx="581.9559999965129" posy="609.23220000043557" maxwidth="200" width="201" height="70" side="left" fold="false" treesize="70" color="#7a36b1" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Scripts process the deeplearning databse</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="27" posx="628.9559999965129" posy="679.23220000043557" maxwidth="200" width="154" height="49" side="left" fold="false" treesize="49" color="#7a36b1" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Croping images</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="28" posx="585.9559999965129" posy="728.23220000043557" maxwidth="200" width="197" height="49" side="left" fold="false" treesize="49" color="#7a36b1" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Rewriting image path</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="18" posx="889.9559999965129" posy="903.23220000043557" maxwidth="200" width="127" height="49" side="left" fold="false" treesize="301" color="#3689e6" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Data Loader</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="19" posx="656.9559999965129" posy="833.23220000043557" maxwidth="200" width="133" height="49" side="left" fold="false" treesize="161" color="#3689e6" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Create Batch</nodename>
+              <nodenote></nodenote>
+              <nodes>
+                <node id="20" posx="361.9559999965129" posy="777.23220000043557" maxwidth="200" width="195" height="70" side="left" fold="false" treesize="70" color="#3689e6" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Half of batch positive examples, if possible</nodename>
+                  <nodenote></nodenote>
+                </node>
+                <node id="21" posx="342.9559999965129" posy="847.23220000043557" maxwidth="200" width="214" height="91" side="left" fold="false" treesize="91" color="#3689e6" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Rest random negative examples from full data set</nodename>
+                  <nodenote></nodenote>
+                </node>
+              </nodes>
+            </node>
+            <node id="22" posx="576.9559999965129" posy="938.23220000043557" maxwidth="200" width="213" height="70" side="left" fold="false" treesize="70" color="#3689e6" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Perfomance? (Possibly bottleneck)</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="23" posx="580.9559999965129" posy="1008.2322000004356" maxwidth="200" width="209" height="70" side="left" fold="false" treesize="70" color="#3689e6" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Examples not very hard!!! (Slow learning!)</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="29" posx="910.95599999651313" posy="1088.7322000004356" maxwidth="200" width="106" height="49" side="left" fold="false" treesize="70" color="#715344" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Validation</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="30" posx="590.95599999651313" posy="1078.2322000004356" maxwidth="200" width="220" height="70" side="left" fold="false" treesize="70" color="#715344" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Google Colab Notebook (explore_predictions)</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="6" posx="1369.9559999965131" posy="556.73220000043557" maxwidth="200" width="138" height="49" side="right" fold="false" treesize="161" color="#f37329" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Data cleaning</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="8" posx="1607.9559999965136" posy="500.73220000043557" maxwidth="200" width="155" height="91" side="right" fold="false" treesize="91" color="#f37329" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Selecting highly populated pairs (#_pair_id &gt; 20)</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="9" posx="1607.9559999965136" posy="591.73220000043557" maxwidth="200" width="150" height="70" side="right" fold="false" treesize="70" color="#f37329" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Crop images to bounding box</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="11" posx="1369.9559999965131" posy="899.73220000043557" maxwidth="200" width="77" height="49" side="right" fold="false" treesize="525" color="#68b723" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Model</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="12" posx="1546.9559999965131" posy="661.73220000043557" maxwidth="200" width="169" height="91" side="right" fold="false" treesize="91" color="#68b723" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Transfer learning: Pretrained Model (EfficientNetB0) </nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="13" posx="1546.9559999965131" posy="752.73220000043557" maxwidth="200" width="196" height="91" side="right" fold="false" treesize="91" color="#68b723" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Loss: TripletSemiHardLoss (Keras) = FaceNet</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="14" posx="1546.9559999965131" posy="990.73220000043557" maxwidth="200" width="86" height="49" side="right" fold="false" treesize="343" color="#68b723" colorroot="false" layout="Horizontal">
+              <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Metrics</nodename>
+              <nodenote></nodenote>
+              <nodes>
+                <node id="15" posx="1732.9559999965131" posy="843.73220000043557" maxwidth="200" width="221" height="91" side="right" fold="false" treesize="91" color="#68b723" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Mean positive distance vs mean negative distance (Too optimistic)</nodename>
+                  <nodenote></nodenote>
+                </node>
+                <node id="16" posx="1732.9559999965131" posy="934.73220000043557" maxwidth="200" width="215" height="91" side="right" fold="false" treesize="91" color="#68b723" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Largest positive distance vs smallest negative ("pessimistic")</nodename>
+                  <nodenote></nodenote>
+                </node>
+                <node id="17" posx="1732.9559999965131" posy="1025.7322000004356" maxwidth="200" width="219" height="91" side="right" fold="false" treesize="91" color="#68b723" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>All positive distances vs all negative distance (Might be too optimistic)</nodename>
+                  <nodenote></nodenote>
+                </node>
+                <node id="31" posx="1732.9559999965131" posy="1116.7322000004356" maxwidth="200" width="192" height="70" side="right" fold="false" treesize="70" color="#68b723" colorroot="false" layout="Horizontal">
+                  <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Notebook: Custom_Metric_Test</nodename>
+                  <nodenote></nodenote>
+                </node>
+              </nodes>
+            </node>
+          </nodes>
+        </node>
+      </nodes>
+    </node>
+    <node id="7" posx="1124.9559999965131" posy="280.23220000043557" maxwidth="200" width="90" height="49" side="left" fold="false" treesize="70" layout="Horizontal">
+      <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Dataset</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="10" posx="1314.9559999965131" posy="269.73220000043557" maxwidth="144" width="139" height="70" side="right" fold="false" treesize="70" color="#f9c440" colorroot="false" layout="Horizontal">
+          <style linktype="straight" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Deepfashion2 (cat_id = 1)</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+  </nodes>
+</minder>

@@ -128,5 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# CUSTOM joblib
-*.joblib
+# Zipfiles from trained models:
+*.zip

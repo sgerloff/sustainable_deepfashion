@@ -1,0 +1,30 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "train_data": {
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory"
+  },
+  "model": {
+    "factory": "src.models.mobile_net_triplet_model_factory.MobileNetV2DropoutTripletModelFactory",
+    "basemodel_freeze_ratio": 1.0,
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 32,
+      "extraction_layers_size": "[1024, 512, 256]",
+      "dropout_ratios": "[0.3, 0.3, 0.3]"
+    },
+    "load": "None",
+    "fit": {
+      "kwargs": {
+        "epochs": 50
+      }
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-3,
+      "max_lr": 1e1,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
+  }
+}

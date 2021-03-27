@@ -1,0 +1,69 @@
+{
+  "train_data": {
+    "dataframe": "data/processed/category_id_1_min_pair_count_10_deepfashion_train.joblib",
+    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
+    "kwargs": {
+      "batch_size": 64,
+      "data_slice_ratio": 1.0,
+      "shuffle": "True"
+    }
+  },
+  "validation_data": "None",
+  "model": {
+    "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0TripletModelFactory",
+    "basemodel_freeze_ratio": 1.0,
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 32,
+      "extraction_layers_size": "[1024, 512, 256]"
+    },
+    "load": "None",
+    "fit": {
+      "kwargs": {
+        "epochs": 100
+      }
+    }
+  },
+  "loss": {
+    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
+    "kwargs": {
+    }
+  },
+  "optimizer": {
+    "optimizer": "tensorflow.keras.optimizers.Adam",
+    "kwargs": {
+      "learning_rate": 1e-5
+    }
+  },
+  "metric": {
+    "metric": "src.metrics.triplet_metrics.PessimisticTripletMetric",
+    "kwargs": {
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.Checkpoint": {
+      "path": "__default_filename__",
+      "kwargs": {
+      }
+    },
+    "src.models.callbacks.Tensorboard": {
+      "log_dir": "__default_filename__",
+      "kwargs": {
+
+      }
+    },
+    "src.models.callbacks.TopKValidation": {
+      "dataframe": "data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+      "epoch_frequency": 1,
+      "best_model_filepath": "__default_filename__",
+      "k_list": "[1,5,10]"
+    },
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-5,
+      "max_lr": 5e-3,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
+  },
+  "cleanup_cmd": "None"
+}

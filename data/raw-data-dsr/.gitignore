@@ -1,0 +1,7 @@
+#Ignore all dataframes
+*.joblib
+#Ignore all sufolders
+pair-directories
+raw-GJ
+raw-Sascha
+raw-Sergio

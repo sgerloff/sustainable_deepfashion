@@ -1,0 +1,4 @@
+#Ignore all dataframes
+*.joblib
+#Ignore all subfolders
+category_1_min_count_10

@@ -1,0 +1,10 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "model": {
+    "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0DropoutTripletModelFactory",
+    "kwargs": {
+      "extraction_layers_size": "[1024, 512, 256]",
+      "dropout_ratios": "[0.5, 0.5, 0.5]"
+    }
+  }
+}

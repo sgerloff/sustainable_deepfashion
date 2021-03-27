@@ -1,0 +1,6 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "train_data": {
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory"
+  }
+}
