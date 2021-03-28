@@ -20,7 +20,7 @@
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "latent_dim": 256,
-      "filters_per_conv_layer": "[8, 32, 128, 512, 2048]"
+      "filters_per_conv_layer": "[64, 128, 256, 512, 1024]"
     },
     "load": "None",
     "fit": {
