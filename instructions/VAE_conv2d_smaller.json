@@ -20,9 +20,9 @@
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "latent_dim": 256,
-      "filters_per_conv_layer": "[32, 64, 128, 256, 512]"
+      "filters_per_conv_layer": "[8, 32, 128, 512, 2048]"
     },
-    "load": "VAE_conv2d_smaller.meta",
+    "load": "None",
     "fit": {
       "kwargs": {
         "epochs": 100
@@ -33,7 +33,7 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 1e-4
+      "learning_rate": 1e-3
     }
   },
   "metric": "None",
@@ -53,12 +53,6 @@
       "epoch_frequency": 1,
       "best_model_filepath": "__default_filename__",
       "k_list": "[1,5,10]"
-    },
-    "src.models.callbacks.CyclicLR": {
-      "base_lr": 1e-4,
-      "max_lr": 1e-3,
-      "step_size": 376,
-      "mode": "exp_range"
     }
   },
   "cleanup_cmd": "None"
