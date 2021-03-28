@@ -19,7 +19,7 @@
     "factory": "src.models.VAE_model_factory.VAEModelFactory",
     "kwargs": {
       "input_shape": "(224, 224, 3)",
-      "latent_dim": 512,
+      "latent_dim": 128,
       "filters_per_conv_layer": "[16, 32, 64, 128, 256]"
     },
     "load": "None",
