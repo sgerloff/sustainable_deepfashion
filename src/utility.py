@@ -1,5 +1,8 @@
+import cv2
 import os
 import hashlib
+import matplotlib.pyplot as plt
+import plotly.express as px
 
 
 def get_project_dir():
@@ -72,3 +75,73 @@ def draw_bbox(path2image, bounding_box, color=(255, 255, 0), thickness=3):
     plt.imshow(image)
 
     return
+
+
+def plot_bar(df, x, y, color, title, width=900, height=600, showlegend=False):
+    '''
+    Creates a bar plot with plotly
+    '''
+    fig = px.bar(df, 
+                 x=x,
+                 y=y, 
+               #  title=title, 
+                 width=width, 
+                 height=height, 
+                 color=color
+    )
+    fig.update_layout(
+        title=dict(
+        text=title,
+        x=0.5,
+        y=0.95,
+        xanchor='center',
+        yanchor='top',
+    ),
+    xaxis_title=x,
+    yaxis_title=y,
+    showlegend=False,
+    legend_title="Legend",
+    font=dict(
+        family="Courier New, monospace",
+        size=14,
+        color="RebeccaPurple",
+    )
+    )
+    fig.show()
+
+
+def plot_donut(df_col, labels, fig_title, plt, text_color='black', 
+               font_size=16.0, explode=(0.02, 0.02, 0.02), 
+               circle_radius=0.5, title_color='blue'):
+    '''
+    Creates a donut plot.
+    '''
+    labels = labels
+    explode = explode
+    plt.rcParams['text.color'] = text_color
+    plt.rcParams['font.size'] = font_size
+    plt.rcParams['axes.titlecolor'] = title_color
+
+    theme = plt.get_cmap('PiYG')
+    colors =[theme(1. * i / len(labels)) for i in range(len(labels))]
+
+    plt.pie(df_col.value_counts(), 
+            labels=labels, 
+            labeldistance=1.2,
+            explode=explode, 
+            shadow=True, 
+            wedgeprops = {'linewidth': 15},
+            pctdistance=0.7,  # position of % numbers
+            autopct="%.1f%%",
+            colors=colors
+    )
+
+    # add a circle at the center to transform it in a donut chart
+    my_circle = plt.Circle( (0,0), circle_radius, color='white')
+    p = plt.gcf()
+    p.gca().add_artist(my_circle)
+    
+    plt.title(fig_title, loc='center', y=1.1)
+    plt.axis('equal')
+    plt.tight_layout()
+    #plt.show()

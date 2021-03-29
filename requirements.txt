@@ -9,3 +9,4 @@ tensorflow-addons
 numpy
 requests
 zipfile38
+plotly
