@@ -1,4 +1,5 @@
 {
+  "copy_instruction": "efficientnetb0_frozen.json",
   "model": {
     "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0TripletModelFactory",
     "basemodel_freeze_ratio": 0.9,
@@ -11,11 +12,6 @@
       }
     }
   },
-  "loss": {
-    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
-    "kwargs": {
-    }
-  },
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
@@ -26,7 +22,7 @@
   "callbacks": {
     "src.models.callbacks.CyclicLR": {
       "base_lr": 1e-5,
-      "max_lr": 5e-3,
+      "max_lr": 1e-2,
       "step_size": 5184,
       "mode": "exp_range"
     }

@@ -21,13 +21,5 @@
       "learning_rate": 1e-5,
       "clipnorm": 1.0
     }
-  },
-  "callbacks": {
-    "src.models.callbacks.CyclicLR": {
-      "base_lr": 1e-5,
-      "max_lr": 5e-4,
-      "step_size": 5184,
-      "mode": "exp_range"
-    }
   }
 }

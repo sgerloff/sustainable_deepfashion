@@ -1,4 +1,5 @@
 {
+  "copy_instruction": "simple_conv2d.json",
   "model": {
     "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DTripletModelFactory",
     "kwargs": {
@@ -14,8 +15,8 @@
   },
   "callbacks": {
     "src.models.callbacks.CyclicLR": {
-      "base_lr": 1e-6,
-      "max_lr": 5e-4,
+      "base_lr": 1e-5,
+      "max_lr": 1e-3,
       "step_size": 5184,
       "mode": "exp_range"
     }
