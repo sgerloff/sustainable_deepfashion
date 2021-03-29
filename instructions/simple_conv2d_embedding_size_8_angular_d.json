@@ -10,5 +10,13 @@
     "kwargs": {
       "distance_metric": "angular"
     }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-6,
+      "max_lr": 1e-4,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
   }
 }
