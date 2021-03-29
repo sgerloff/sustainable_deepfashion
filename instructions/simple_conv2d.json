@@ -20,7 +20,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 50
       }
     }
   },
@@ -35,11 +35,7 @@
       "learning_rate": 1e-5
     }
   },
-  "metric": {
-    "metric": "src.metrics.triplet_metrics.PessimisticTripletMetric",
-    "kwargs": {
-    }
-  },
+  "metric": "None",
   "callbacks": {
     "src.models.callbacks.Checkpoint": {
       "path": "__default_filename__",
