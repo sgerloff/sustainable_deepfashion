@@ -1,0 +1,23 @@
+{
+  "model": {
+    "factory": "src.models.simple_conv2d_triplet_model_factory.SimpleConv2DTripletModelFactory",
+    "kwargs": {
+      "embedding_size": 32
+    }
+  },
+  "loss": {
+    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
+    "kwargs": {
+      "margin": 0.75,
+      "distance_metric": "angular"
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-6,
+      "max_lr": 5e-4,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
+  }
+}

@@ -2,7 +2,7 @@
   "copy_instruction": "efficientnetb0_frozen.json",
   "model": {
     "factory": "src.models.mobile_net_triplet_model_factory.MobileNetV2TripletModelFactory",
-    "basemodel_freeze_ratio": 0.8,
+    "basemodel_freeze_ratio": 0.9,
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "embedding_size": 32,

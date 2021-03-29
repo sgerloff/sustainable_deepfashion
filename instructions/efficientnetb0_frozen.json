@@ -20,7 +20,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 50
       }
     }
   },
@@ -33,11 +33,6 @@
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
       "learning_rate": 1e-5
-    }
-  },
-  "metric": {
-    "metric": "src.metrics.triplet_metrics.PessimisticTripletMetric",
-    "kwargs": {
     }
   },
   "callbacks": {
