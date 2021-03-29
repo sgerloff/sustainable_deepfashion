@@ -1,0 +1,14 @@
+{
+  "copy_instruction": "simple_conv2d.json",
+  "model": {
+    "kwargs": {
+      "embedding_size": 128
+    }
+  },
+  "loss": {
+    "loss": "tensorflow_addons.losses.TripletSemiHardLoss",
+    "kwargs": {
+      "distance_metric": "angular"
+    }
+  }
+}

@@ -5,7 +5,16 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
-import base64
+import base64, io
+from PIL import Image
+
+import numpy as np
+import pandas as pd
+
+from src.dash_app.inference import ModelInference
+
+model = ModelInference("simple_conv2d_embedding_size_16.meta")
+prediction_df = pd.read_csv("/home/sascha/Documents/Projects/fashion_one_shot_test/data/processed/dash_test_predictions.csv")
 
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"]
@@ -37,6 +46,12 @@ app.layout = html.Div([
 
 
 def parse_contents(contents, filename, date):
+    embedding = model.predict(contents)
+    print(type(embedding), embedding)
+    pred = eval(prediction_df["prediction"].iloc[1])
+    print(type(pred), pred)
+    print(np.array(embedding) - np.array(pred))
+
     return html.Div([
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
@@ -46,12 +61,12 @@ def parse_contents(contents, filename, date):
         html.Img(src=contents, width=500),
         html.Hr(),
         html.Div('Embedding Vector:'),
-        html.Pre(contents[0:200] + '...', style={
-            'whiteSpace': 'pre-wrap',
-            'wordBreak': 'break-all',
-            'width': 500
-        }),
-        html.Pre(f"{base64.decodebytes(contents)}")
+        # html.Pre(contents[0:200] + '...', style={
+        #     'whiteSpace': 'pre-wrap',
+        #     'wordBreak': 'break-all',
+        #     'width': 500
+        # }),
+        html.Pre(f"{embedding[0]}, {len(prediction_df)}, {prediction_df.keys()}")
     ])
 
 

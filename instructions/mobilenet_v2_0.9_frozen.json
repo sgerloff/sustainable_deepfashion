@@ -1,0 +1,25 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "model": {
+    "factory": "src.models.mobile_net_triplet_model_factory.MobileNetV2TripletModelFactory",
+    "basemodel_freeze_ratio": 0.9,
+    "kwargs": {
+      "input_shape": "(224, 224, 3)",
+      "embedding_size": 32,
+      "extraction_layers_size": "[1024, 512, 256]"
+    },
+    "load": "None",
+    "fit": {
+      "kwargs": {
+        "epochs": 50
+      }
+    }
+  },
+  "optimizer": {
+    "optimizer": "tensorflow.keras.optimizers.Adam",
+    "kwargs": {
+      "learning_rate": 1e-5,
+      "clipnorm": 1.0
+    }
+  }
+}

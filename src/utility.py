@@ -1,7 +1,7 @@
-import cv2
 import os
 import hashlib
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import plotly.express as px
 
 
@@ -48,32 +48,37 @@ def savely_unfreeze_layers_of_model(model, ratio):
     return model
 
 
-def draw_bbox(path2image, bounding_box, color=(255, 255, 0), thickness=3):
-    """    
-    A simple function that draws a bounding box from a dataframe using the cv2.rectangle() method.
-    ----------------------------------------------------------------------------------------------  
+def draw_bbox(path2image, bounding_box, edgecolor='r', linewidth=2):
+    """
+    A simple function that draws a bounding box from a dataframe using.
+    ------------------------------------------------------------------
     Atributes:
     ---------
       path2image : str
-        path to the image         
+        path to the image
       bounding_box : list
         bounding box [x1, y1, x2, y2]
-      color : tuple
-        RGB code for the box line, default color is yellow (255, 255, 0) 
-      thickness : int
-        line thickness
-    
-    Methods:
-    -------
-       cv2.rectangle()
-        draw a rectangle with a chosen color line borders of a chosen thickness 
-    """                      
-    start_point = (bounding_box[0], bounding_box[1]) # top left corner
-    end_point = (bounding_box[2], bounding_box[3])   # botton right corner
+      edgecolor: str
+        line color
+      linewidth: int
+        line tickness
+    """
+    x1 = bounding_box[0]
+    y1 = bounding_box[1]
+    width = bounding_box[3] - bounding_box[1]
+    height = bounding_box[2] - bounding_box[0]
 
-    image = cv2.rectangle(path2image, start_point, end_point, color, thickness) 
-    plt.imshow(image)
+    fig, ax = plt.subplots()
+    ax.imshow(path2image)
 
+    rect = patches.Rectangle((x1, y1),
+                             width=width,
+                             height=height,
+                             linewidth=linewidth,
+                             edgecolor=edgecolor,
+                             facecolor='none')
+    ax.add_patch(rect)
+    plt.show()
     return
 
 
