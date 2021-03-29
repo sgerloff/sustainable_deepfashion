@@ -10,3 +10,4 @@ numpy
 requests
 zipfile38
 plotly
+PyQt5
