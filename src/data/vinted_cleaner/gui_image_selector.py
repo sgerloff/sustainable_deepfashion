@@ -16,15 +16,18 @@ class MainWindow(QMainWindow):
 
         deleteAct = QAction(qApp.style().standardIcon(QStyle.SP_TrashIcon), 'Delete Selection', self)
         deleteAct.setStatusTip('Will delete the selected images')
+        deleteAct.setShortcut('D')
         deleteAct.triggered.connect(self.delete_images)
 
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(deleteAct)
 
         self.backButton = QPushButton('Back', self)
+        self.backButton.setShortcut('B')
         self.backButton.clicked.connect(self.back)
 
         self.nextButton = QPushButton('Next', self)
+        self.nextButton.setShortcut('N')
         self.nextButton.clicked.connect(self.next)
 
         self.toolbar.addWidget(self.backButton)
