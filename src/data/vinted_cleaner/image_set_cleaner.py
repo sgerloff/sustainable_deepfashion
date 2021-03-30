@@ -21,7 +21,7 @@ def main(FLAGS):
 
     verify_input(FLAGS)
     app = QApplication([])
-    window = MainWindow(FLAGS.directory_dir, FLAGS.file_count)
+    window = MainWindow(FLAGS.directory_dir, FLAGS.directory_count)
     sys.exit(app.exec_())
 
 
@@ -39,11 +39,11 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        '--file_count',
+        '--directory_count',
         type=int,
         default=0,
         help="""\
-        Number of file in mentioned directory.\
+        Number of directory in mentioned directory_dir.\
         """
     )
 
