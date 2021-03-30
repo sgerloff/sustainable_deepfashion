@@ -1,0 +1,14 @@
+#upload-image {
+    width: 50%;
+    height: 60px;
+    line-height: 60px;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+}
+
+#prediction-image {
+    border: 5px solid #000000;
+}

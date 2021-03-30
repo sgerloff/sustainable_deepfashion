@@ -25,11 +25,14 @@ def load_metadata(path):
     return metadata_
 
 
-def load_model_from_metadata(path, compile=True):
+def load_model_from_metadata(path, compile=True, best_model_key=None):
     metadata = load_metadata(path)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
     model = ip.get_model()
-    model.load_weights(os.path.join(get_project_dir(), metadata["saved_model"]))
+    if best_model_key is None:
+        model.load_weights(os.path.join(get_project_dir(), metadata["saved_model"]))
+    else:
+        model.load_weights(os.path.join(get_project_dir(), metadata[best_model_key]))
     compile_kwargs = get_compile_kwargs_from_instruction_parser(ip)
     if compile:
         model.compile(**compile_kwargs)

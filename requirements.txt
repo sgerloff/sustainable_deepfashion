@@ -11,3 +11,4 @@ requests
 zipfile38
 plotly
 PyQt5
+sklearn

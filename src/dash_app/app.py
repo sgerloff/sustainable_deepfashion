@@ -5,80 +5,102 @@ from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
 
-import base64, io
-from PIL import Image
+import base64, os
+from src.utility import get_project_dir
 
 import numpy as np
 import pandas as pd
 
-from src.dash_app.inference import ModelInference
+from src.dash_app.inference import ModelInference, distance
 
-model = ModelInference("simple_conv2d_embedding_size_16.meta")
-prediction_df = pd.read_csv("/home/sascha/Documents/Projects/fashion_one_shot_test/data/processed/dash_test_predictions.csv")
+from sklearn.decomposition import PCA
 
-# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+basename = "simple_conv2d_embedding_size_32-1"
+model = ModelInference(f"{basename}.meta")
+prediction_csv_path = os.path.join(get_project_dir(), "data", "processed", f"{basename}_predictions.csv")
+prediction_df = pd.read_csv(prediction_csv_path)
+prediction_df["prediction"] = prediction_df["prediction"].apply(lambda x: np.array(eval(x)).flatten())
+
+NUMBER_OF_BEST_PREDICTIONS = 10
+
+NUMBER_OF_PCA_SLIDERS = 10
+pca = PCA(n_components=NUMBER_OF_PCA_SLIDERS)
+pca.fit(prediction_df["prediction"].tolist())
+pca_components = pca.components_
+
+slider_input = []
+for i in range(NUMBER_OF_PCA_SLIDERS):
+    slider_input.append(Input(f"pca_slider_{i}", "value"))
+
 external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"]
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app.layout = html.Div([
-    dcc.Upload(
-        id='upload-image',
-        children=html.Div([
-            'Drag and Drop or ',
-            html.A('Select Files')
-        ]),
-        style={
-            'width': '50%',
-            'height': '60px',
-            'lineHeight': '60px',
-            'borderWidth': '1px',
-            'borderStyle': 'dashed',
-            'borderRadius': '5px',
-            'textAlign': 'center',
-            'margin': '10px'
-        },
-        # Allow multiple files to be uploaded
-        multiple=True
-    ),
-    html.Div(id='output-image-upload'),
-])
+
+def build_layout():
+    children = []
+    children.append(
+        dcc.Upload(
+            id='upload-image',
+            children=html.Div([
+                'Drag and Drop or ',
+                html.A('Select Files')
+            ]),
+            multiple=False
+        )
+    )
+    for i in range(NUMBER_OF_PCA_SLIDERS):
+        children.append(
+            dcc.Slider(
+                id=f"pca_slider_{i}",
+                min=-1., max=1., step=0.01, value=0.0
+            )
+        )
+    children.append(
+        html.Div(id='output-image-upload')
+    )
+    return children
 
 
-def parse_contents(contents, filename, date):
+app.layout = html.Div(build_layout())
+
+
+def parse_contents(contents, values):
     embedding = model.predict(contents)
-    print(type(embedding), embedding)
-    pred = eval(prediction_df["prediction"].iloc[1])
-    print(type(pred), pred)
-    print(np.array(embedding) - np.array(pred))
 
-    return html.Div([
-        html.H5(filename),
-        html.H6(datetime.datetime.fromtimestamp(date)),
+    values = np.array(values).flatten()
+    embedding = embedding + np.dot(values, pca_components)
+    prediction_df["distance"] = prediction_df["prediction"].apply(
+        lambda x: distance(x, embedding, metric=model.get_metric())
+    )
+    top_5_pred = prediction_df.sort_values(by="distance", ascending=True)["image"].head(
+        NUMBER_OF_BEST_PREDICTIONS).to_list()
 
-        # HTML images accept base64 encoded strings in the same format
-        # that is supplied by the upload
+    top_5_pred_base64 = [base64.b64encode(open(file, 'rb').read()).decode() for file in top_5_pred]
+
+    children = [
         html.Img(src=contents, width=500),
         html.Hr(),
         html.Div('Embedding Vector:'),
-        # html.Pre(contents[0:200] + '...', style={
-        #     'whiteSpace': 'pre-wrap',
-        #     'wordBreak': 'break-all',
-        #     'width': 500
-        # }),
-        html.Pre(f"{embedding[0]}, {len(prediction_df)}, {prediction_df.keys()}")
-    ])
+        html.Pre(f"{embedding[0]}"),
+    ]
+    for i in range(NUMBER_OF_BEST_PREDICTIONS):
+        children.append(
+            html.Img(id="prediction-image", src='data:image/jpeg;base64,{}'.format(top_5_pred_base64[i]), height=300)
+        )
+
+    return html.Div(children=children)
 
 
 @app.callback(Output('output-image-upload', 'children'),
               Input('upload-image', 'contents'),
-              State('upload-image', 'filename'),
-              State('upload-image', 'last_modified'))
-def update_output(list_of_contents, list_of_names, list_of_dates):
-    if list_of_contents is not None:
+              slider_input)
+def update_output(contents, *values):
+    if contents is not None:
         children = [
-            parse_contents(c, n, d) for c, n, d in
-            zip(list_of_contents, list_of_names, list_of_dates)]
+            parse_contents(contents, values)
+        ]
         return children
 
 
