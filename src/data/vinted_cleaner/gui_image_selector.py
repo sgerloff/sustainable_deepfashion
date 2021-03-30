@@ -6,13 +6,13 @@ from src.data.vinted_cleaner.file_processing import *
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, directory_dir, file_count=0, parent=None):
+    def __init__(self, directory_dir, directory_count=0, parent=None):
         super(MainWindow, self).__init__(parent)
 
         self.all_directories = get_all_directories_path(directory_dir)
         self.all_directories.sort()
         self.deleted_images = []
-        self.count = file_count
+        self.count = directory_count
 
         deleteAct = QAction(qApp.style().standardIcon(QStyle.SP_TrashIcon), 'Delete Selection', self)
         deleteAct.setStatusTip('Will delete the selected images')
