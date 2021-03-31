@@ -211,19 +211,22 @@ class TopKValidation(tf.keras.callbacks.Callback):
         return self.top_k_log
 
 class VAETopKValidation(TopKValidation):
+    def __init__(self):
+        super().__init__()
+        self.input_shape = (96, 96, 3)
+
     def get_top_k_accuracies(self):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def get_dataset(self, dataframe_path, preprocessor):
         validation_df = load_dataframe(dataframe_path)
-        input_shape = (224, 224, 3)
         if hasattr(self.model, "encoder"):
-            input_shape = (self.model.encoder.layers[0].input.shape[1],
-                           self.model.encoder.layers[0].input.shape[2],
-                           self.model.encoder.layers[0].input.shape[3])
+            self.input_shape = (self.model.encoder.layers[0].input.shape[1],
+                                self.model.encoder.layers[0].input.shape[2],
+                                self.model.encoder.layers[0].input.shape[3])
 
-        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=input_shape)
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=self.input_shape)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
 
