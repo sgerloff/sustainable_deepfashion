@@ -169,6 +169,7 @@ class TopKValidation(tf.keras.callbacks.Callback):
             self.k_list.append(1)
 
         self.distance_metric = "L2"
+        self.input_shape = (224, 224, 3)
 
         self.epoch_frequency = epoch_frequency
         self.best_top_k = 0.
@@ -217,10 +218,12 @@ class VAETopKValidation(TopKValidation):
 
     def get_dataset(self, dataframe_path, preprocessor):
         validation_df = load_dataframe(dataframe_path)
-        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor,
-                                           input_shape=(self.model.encoder.layers[0].input.shape[1],
-                                                        self.model.encoder.layers[0].input.shape[2],
-                                                        self.model.encoder.layers[0].input.shape[3]))
+        if hasattr(self.model, "encoder"):
+            self.input_shape = (self.model.encoder.layers[0].input.shape[1],
+                                self.model.encoder.layers[0].input.shape[2],
+                                self.model.encoder.layers[0].input.shape[3])
+
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=self.input_shape)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
 
