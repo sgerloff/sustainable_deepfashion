@@ -211,9 +211,27 @@ class TopKValidation(tf.keras.callbacks.Callback):
         return self.top_k_log
 
 class VAETopKValidation(TopKValidation):
-    def __init__(self):
+    def __init__(self, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+                 epoch_frequency=10,
+                 best_model_filepath=None,
+                 k_list=[1,5,10],
+                 preprocessor=(lambda x:x)):
         super().__init__()
+        self.dataset = self.get_dataset(dataframe, preprocessor)
+
+        self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
+        self.k_list = k_list
+        #Ensure that we track top-1
+        if 1 not in self.k_list:
+            self.k_list.append(1)
+
+        self.distance_metric = "L2"
         self.input_shape = (96, 96, 3)
+
+        self.epoch_frequency = epoch_frequency
+        self.best_top_k = 0.
+
+        self.top_k_log = {}
 
     def get_top_k_accuracies(self):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
