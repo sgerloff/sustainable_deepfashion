@@ -217,6 +217,7 @@ class VAETopKValidation(TopKValidation):
                  k_list=[1,5,10],
                  preprocessor=(lambda x:x)):
         super().__init__()
+        self.input_shape = (96, 96, 3)
         self.dataset = self.get_dataset(dataframe, preprocessor)
 
         self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
@@ -226,7 +227,6 @@ class VAETopKValidation(TopKValidation):
             self.k_list.append(1)
 
         self.distance_metric = "L2"
-        self.input_shape = (96, 96, 3)
 
         self.epoch_frequency = epoch_frequency
         self.best_top_k = 0.
