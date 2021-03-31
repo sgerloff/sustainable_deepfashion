@@ -218,9 +218,9 @@ class VAETopKValidation(TopKValidation):
     def get_dataset(self, dataframe_path, preprocessor):
         validation_df = load_dataframe(dataframe_path)
         factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor,
-                                           input_shape=(model.encoder.layers[0].input.shape[1],
-                                                        model.encoder.layers[0].input.shape[2],
-                                                        model.encoder.layers[0].input.shape[3]))
+                                           input_shape=(self.model.encoder.layers[0].input.shape[1],
+                                                        self.model.encoder.layers[0].input.shape[2],
+                                                        self.model.encoder.layers[0].input.shape[3]))
         return factory.get_dataset(batch_size=16, shuffle=False)
 
 
