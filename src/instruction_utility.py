@@ -142,7 +142,7 @@ class InstructionParser:
             ratio = self.instruction["model"]["basemodel_freeze_ratio"]
 
         if ratio is not None:
-            self.model_factory.set_basemodel_freeze_ratio(ratio)
+            self.model_factory.set_basemodel_freeze_ratio(ratio, batch_norm_trainable=True)
 
     def load_model_factory_from_metafile(self):
         metadata = load_metadata(self.instruction["model"]["load"])

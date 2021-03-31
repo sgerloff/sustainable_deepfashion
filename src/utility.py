@@ -26,7 +26,7 @@ def get_hashsum_of_file(path_to_file):
             sha256.update(data)
     return sha256.hexdigest()
 
-def savely_unfreeze_layers_of_model(model, ratio):
+def savely_unfreeze_layers_of_model(model, ratio, batch_norm_trainable=False):
     """
     Freezes the first 100*ratio percent of the layers
     of the model. The remaining layers are set to
@@ -41,7 +41,7 @@ def savely_unfreeze_layers_of_model(model, ratio):
     for layer in model.layers[:ratio_index]:
         layer.trainable = False
     for layer in model.layers[ratio_index:]:
-        if layer.__class__.__name__ == "BatchNormalization":
+        if layer.__class__.__name__ == "BatchNormalization" and not batch_norm_trainable:
             layer.trainable = False
         else:
             layer.trainable = True

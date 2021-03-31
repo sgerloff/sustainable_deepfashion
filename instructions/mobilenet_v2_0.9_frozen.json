@@ -19,7 +19,15 @@
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
       "learning_rate": 1e-5,
-      "clipnorm": 1.0
+      "clipnorm": 0.5
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-6,
+      "max_lr": 5e-4,
+      "step_size": 12960,
+      "mode": "exp_range"
     }
   }
 }
