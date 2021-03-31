@@ -15,6 +15,25 @@ from src.dash_app.inference import ModelInference, distance
 
 from sklearn.decomposition import PCA
 
+import plotly.graph_objects as go
+
+fig = go.Figure(go.Barpolar(
+    r=[0],
+    theta=[0],
+    width=[0],
+    marker_line_width=1,
+    opacity=0.8
+))
+
+fig.update_layout(
+    template=None,
+    polar=dict(
+        radialaxis=dict(range=[0, 5], showticklabels=False, ticks=''),
+        angularaxis=dict(showticklabels=False, ticks='')
+    )
+)
+
+
 basename = "simple_conv2d_embedding_size_32-1"
 model = ModelInference(f"{basename}.meta")
 prediction_csv_path = os.path.join(get_project_dir(), "data", "processed", f"{basename}_predictions.csv")
@@ -27,6 +46,8 @@ NUMBER_OF_PCA_SLIDERS = 3
 pca = PCA(n_components=NUMBER_OF_PCA_SLIDERS)
 pca.fit(prediction_df["prediction"].tolist())
 pca_components = pca.components_
+
+EMBEDDING_SIZE = pca_components[0].shape[0]
 
 slider_input = []
 for i in range(NUMBER_OF_PCA_SLIDERS):
@@ -44,24 +65,40 @@ def build_upload_layout():
             id='upload-image-box',
             children=html.Div([
                 'Drag and Drop or ',
-                html.A('Select Files')
+                html.A('Select Files'),
+                html.Div(id="output-image-upload")
             ]),
             multiple=False
         )
     )
-    children.append(html.Div(id='output-image-upload'))
+    # children.append(html.Div(id='output-image-upload'))
     for i in range(NUMBER_OF_PCA_SLIDERS):
         children.append(
             dcc.Slider(
                 id=f"pca_slider_{i}",
-                min=-1., max=1., step=0.01, value=0.0
+                min=-1., max=1., step=0.01, value=0.0,
+                tooltip={"always_visible": False, "placement": "bottom"}
             )
         )
     return html.Div(id="upload-layout", children=children)
 
 
 def build_layout():
-    return [build_upload_layout(), html.Div(id='output-image-prediction')]
+    layout = html.Div(className="container",
+                      children=[
+                          html.Div(className="menu-container",
+                                   children=[
+                                       html.H4(id="title", children=["Sustainable Deepfashion"]),
+                                       html.P(id="description", children=["This is a description, that is very long... In fact, it is so long that it spans over multile lines"]),
+                                       build_upload_layout()
+                                   ]),
+                          html.Div(className="prediction-container",
+                                   children=[
+                                       html.Div(id='output-image-prediction'),
+                                       dcc.Graph(id="embedding-plot")
+                                   ])
+                      ])
+    return layout
 
 
 app.layout = html.Div(build_layout())
@@ -76,31 +113,67 @@ def predict_from_contents(contents, values):
 
     values = np.array(values).flatten()
     embedding = embedding + np.dot(values, pca_components)
+    embedding = embedding.flatten()
+
     prediction_df["distance"] = prediction_df["prediction"].apply(
         lambda x: distance(x, embedding, metric=model.get_metric())
     )
-    top_5_pred = prediction_df.sort_values(by="distance", ascending=True)["image"].head(
+    top_k_pred = prediction_df.sort_values(by="distance", ascending=True)["image"].head(
         NUMBER_OF_BEST_PREDICTIONS).to_list()
 
-    top_5_pred_base64 = [base64.b64encode(open(file, 'rb').read()).decode() for file in top_5_pred]
+    top_k_pred_base64 = [base64.b64encode(open(file, 'rb').read()).decode() for file in top_k_pred]
 
-    children = []
-    for i in range(NUMBER_OF_BEST_PREDICTIONS):
-        children.append(
-            html.Img(id="prediction-image", src='data:image/jpeg;base64,{}'.format(top_5_pred_base64[i]))
+    return build_prediction_gallery(top_k_pred_base64), update_embedding_plot(embedding)
+
+
+def update_embedding_plot(embedding_vector):
+    fig = go.Figure(go.Barpolar(
+        r=[e+1. for e in embedding_vector.tolist()],
+        theta=[360.*i/embedding_vector.shape[0] for i in range(embedding_vector.shape[0])],
+        # width=[20, 15, 10, 20, 15, 30, 15, ],
+        marker_line_color="black",
+        marker_line_width=1,
+        opacity=1.0
+    ))
+
+    fig.update_layout(
+        template=None,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        polar=dict(
+            radialaxis=dict(showticklabels=False, ticks='', showgrid=False, showline=False),
+            angularaxis=dict(showticklabels=False, ticks='', showgrid=False, showline=False)
+        )
+    )
+    return fig
+
+
+def build_prediction_gallery(top_k_pred_base64):
+    list_of_images = []
+    for img in top_k_pred_base64:
+        list_of_images.append(
+            html.Li(
+                html.Img(
+                    id="prediction-img",
+                    src='data:image/jpeg;base64,{}'.format(img)
+                )
+            )
         )
 
+    children = [html.Ul(className="vertical-center", children=list_of_images)]
     return children
 
 
-@app.callback([Output('output-image-upload', 'children'), Output('output-image-prediction', 'children')],
+@app.callback([Output('output-image-upload', 'children'),
+               Output('output-image-prediction', 'children'),
+               Output("embedding-plot", "figure")],
               Input('upload-image-box', 'contents'),
               slider_input)
 def update_output(contents, *values):
     if contents is not None:
-        return parse_upload(contents), predict_from_contents(contents, values)
+        return parse_upload(contents), *predict_from_contents(contents, values)
     else:
-        return None, None
+        return None, None, update_embedding_plot(np.zeros((EMBEDDING_SIZE)))
 
 
 if __name__ == '__main__':

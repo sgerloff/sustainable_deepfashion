@@ -1,30 +1,66 @@
-#upload-layout {
-    width: 50%;
-    float: left;
+#title {
+    text-align: center;
+    margin-top: 1cm;
+    margin-bottom: 1cm;
 }
 
-#upload-image-box {
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    border-width: 1px;
-    border-style: dashed;
-    border-radius: 5px;
-    text-align: center;
+#description {
     margin: 10px;
 }
 
+#upload-layout {
+    width: 100%;
+}
+
+#upload-image-box {
+    width: 90%;
+    min-height: 60px;
+    min-line-height: 60px;
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 5px;
+    text-align: left;
+    margin: auto;
+    padding: 10px;
+    margin-bottom: 1cm;
+}
+
 #upload-image {
-    width: 300px;
+    max-width: 6cm;
+}
+
+#output-image-upload {
+    margin: 5px;
+}
+
+#embedding-plot {
+    z-index: 100;
 }
 
 #output-image-prediction {
-    width: 50%;
-    float: right;
+    width: 100%;
 }
 
 #prediction-image {
     border: 5px solid #000000;
     max-width: 300px;
     max-height: 300px;
+}
+
+#prediction-img {
+    max-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
+    vertical-align: bottom;
+}
+
+ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+}
+
+li {
+    height: 200px;
+    flex-grow: 1;
 }
