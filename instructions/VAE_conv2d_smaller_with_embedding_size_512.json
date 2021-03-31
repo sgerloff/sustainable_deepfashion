@@ -20,12 +20,12 @@
     "kwargs": {
       "input_shape": "(224, 224, 3)",
       "latent_dim": 512,
-      "filters_per_conv_layer": "[16, 32, 64, 128, 256]"
+      "filters_per_conv_layer": "[32, 64, 128, 256, 512]"
     },
-    "load": "None",
+    "load": "VAE_conv2d_smaller_with_embedding_size_512.meta",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 50
       }
     }
   },
@@ -33,7 +33,7 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 1e-3
+      "learning_rate": 5e-5
     }
   },
   "metric": "None",

@@ -22,7 +22,7 @@
       "latent_dim": 256,
       "filters_per_conv_layer": "[32, 64, 128, 256, 512]"
     },
-    "load": "None",
+    "load": "VAE_conv2d_smaller_with_embedding_size_256.meta",
     "fit": {
       "kwargs": {
         "epochs": 100
