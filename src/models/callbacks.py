@@ -215,6 +215,14 @@ class VAETopKValidation(TopKValidation):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
+    def get_dataset(self, dataframe_path, preprocessor):
+        validation_df = load_dataframe(dataframe_path)
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor,
+                                           input_shape=(model.encoder.layers[0].input.shape[1],
+                                                        model.encoder.layers[0].input.shape[2],
+                                                        model.encoder.layers[0].input.shape[3]))
+        return factory.get_dataset(batch_size=16, shuffle=False)
+
 
 if __name__ == "__main__":
     ip = InstructionParser("simple_conv2d.json")
