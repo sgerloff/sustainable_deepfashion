@@ -218,7 +218,7 @@ class VAETopKValidation(TopKValidation):
                  preprocessor=(lambda x:x)):
         super().__init__()
         self.input_shape = (96, 96, 3)
-        self.dataset = self.get_dataset(dataframe, preprocessor)
+        self.dataset = self.get_dataset(dataframe, preprocessor, self.input_shape)
 
         self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
         self.k_list = k_list
@@ -237,7 +237,7 @@ class VAETopKValidation(TopKValidation):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
-    def get_dataset(self, dataframe_path, preprocessor):
+    def get_dataset(self, dataframe_path, preprocessor, self.input_shape):
         validation_df = load_dataframe(dataframe_path)
         if hasattr(self.model, "encoder"):
             self.input_shape = (self.model.encoder.layers[0].input.shape[1],
