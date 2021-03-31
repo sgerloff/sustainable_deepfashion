@@ -1,5 +1,10 @@
-#upload-image {
+#upload-layout {
     width: 50%;
+    float: left;
+}
+
+#upload-image-box {
+    width: 100%;
     height: 60px;
     line-height: 60px;
     border-width: 1px;
@@ -9,6 +14,17 @@
     margin: 10px;
 }
 
+#upload-image {
+    width: 300px;
+}
+
+#output-image-prediction {
+    width: 50%;
+    float: right;
+}
+
 #prediction-image {
     border: 5px solid #000000;
+    max-width: 300px;
+    max-height: 300px;
 }
