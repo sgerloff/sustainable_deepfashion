@@ -237,14 +237,14 @@ class VAETopKValidation(TopKValidation):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
-    def get_dataset(self, dataframe_path, preprocessor, self.input_shape):
+    def get_dataset(self, dataframe_path, preprocessor, input_shape):
         validation_df = load_dataframe(dataframe_path)
         if hasattr(self.model, "encoder"):
-            self.input_shape = (self.model.encoder.layers[0].input.shape[1],
-                                self.model.encoder.layers[0].input.shape[2],
-                                self.model.encoder.layers[0].input.shape[3])
+            input_shape = (self.model.encoder.layers[0].input.shape[1],
+                           self.model.encoder.layers[0].input.shape[2],
+                           self.model.encoder.layers[0].input.shape[3])
 
-        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=self.input_shape)
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=input_shape)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
 
