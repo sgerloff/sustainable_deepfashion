@@ -211,40 +211,18 @@ class TopKValidation(tf.keras.callbacks.Callback):
         return self.top_k_log
 
 class VAETopKValidation(TopKValidation):
-    def __init__(self, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
-                 epoch_frequency=10,
-                 best_model_filepath=None,
-                 k_list=[1,5,10],
-                 preprocessor=(lambda x:x)):
-        super().__init__()
-        self.input_shape = (96, 96, 3)
-        self.dataset = self.get_dataset(dataframe, preprocessor, self.input_shape)
-
-        self.best_model_filepath = os.path.join(get_project_dir(), "models", best_model_filepath + "_best_top_1.h5")
-        self.k_list = k_list
-        #Ensure that we track top-1
-        if 1 not in self.k_list:
-            self.k_list.append(1)
-
-        self.distance_metric = "L2"
-
-        self.epoch_frequency = epoch_frequency
-        self.best_top_k = 0.
-
-        self.top_k_log = {}
-
     def get_top_k_accuracies(self):
         topk = VAETopKAccuracy(self.model.encoder, self.dataset)
         return topk.get_top_k_accuracies(k_list=self.k_list)
 
     def get_dataset(self, dataframe_path, preprocessor, input_shape):
         validation_df = load_dataframe(dataframe_path)
-        if hasattr(self.model, "encoder"):
-            input_shape = (self.model.encoder.layers[0].input.shape[1],
-                           self.model.encoder.layers[0].input.shape[2],
-                           self.model.encoder.layers[0].input.shape[3])
+        # if hasattr(self.model, "encoder"):
+        #     input_shape = (self.model.encoder.layers[0].input.shape[1],
+        #                    self.model.encoder.layers[0].input.shape[2],
+        #                    self.model.encoder.layers[0].input.shape[3])
 
-        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=input_shape)
+        factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
 
