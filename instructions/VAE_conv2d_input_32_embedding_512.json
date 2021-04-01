@@ -18,9 +18,9 @@
   "model": {
     "factory": "src.models.VAE_model_factory.VAEModelFactory",
     "kwargs": {
-      "input_shape": "(96, 96, 3)",
+      "input_shape": "(32, 32, 3)",
       "latent_dim": 512,
-      "filters_per_conv_layer": "[32, 64, 128, 256, 512]"
+      "filters_per_conv_layer": "[64, 128, 256]"
     },
     "load": "None",
     "fit": {
@@ -33,13 +33,13 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 1e-4
+      "learning_rate": 5e-4
     }
   },
   "metric": "None",
   "callbacks": {
     "src.models.callbacks.Checkpoint": {
-      "path": "__default_filename__",
+      "path": "__default_filename___{epoch:03d}",
       "kwargs": {
       }
     },

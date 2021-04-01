@@ -72,6 +72,7 @@ if __name__ == "__main__":
     metadata_file = "simple_conv2d_embedding_size_16_angular_d-0.meta"
     metadata = load_metadata(metadata_file)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
+
     model = load_model_from_metadata(metadata_file, best_model_key="best_top_1_model")
 
     path_to_df = metadata["instruction"]["callbacks"]["src.models.callbacks.TopKValidation"]["dataframe"]

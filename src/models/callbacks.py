@@ -152,6 +152,19 @@ class CyclicLR(Callback):
 
         K.set_value(self.model.optimizer.lr, self.clr())
 
+# class VisualizeSaver(keras.callbacks.Callback):
+#     def __init__(self, epoch_frequency=1, path="default", file_name=True):
+#         super().__init__()
+#         self.epoch_frequency = epoch_frequency
+#         self.dir = os.path.join(get_project_dir(), "models")
+#         self.file_name = file_name
+#         self.path = path
+#
+#     def on_epoch_end(self, epoch, logs=None):
+#         if self.file_name:
+#             dir = os.path.join(self.dir, path + "{}.h5".format(epoch))
+#         if epoch % self.epoch_frequency == 0:
+#             self.model.save_weights(dir)
 
 class TopKValidation(tf.keras.callbacks.Callback):
     def __init__(self, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
@@ -221,7 +234,7 @@ class VAETopKValidation(TopKValidation):
         #     input_shape = (self.model.encoder.layers[0].input.shape[1],
         #                    self.model.encoder.layers[0].input.shape[2],
         #                    self.model.encoder.layers[0].input.shape[3])
-        input_shape = (96, 96, 3)
+        input_shape = (32, 32, 3)
         factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=input_shape)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
