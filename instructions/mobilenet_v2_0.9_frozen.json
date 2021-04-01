@@ -1,5 +1,10 @@
 {
   "copy_instruction": "efficientnetb0_frozen.json",
+  "train_data": {
+    "kwargs": {
+      "batch_size": 32
+    }
+  },
   "model": {
     "factory": "src.models.mobile_net_triplet_model_factory.MobileNetV2TripletModelFactory",
     "basemodel_freeze_ratio": 0.9,
@@ -26,7 +31,7 @@
     "src.models.callbacks.CyclicLR": {
       "base_lr": 1e-6,
       "max_lr": 5e-4,
-      "step_size": 12960,
+      "step_size": 37560,
       "mode": "exp_range"
     }
   }

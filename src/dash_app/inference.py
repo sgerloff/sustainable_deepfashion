@@ -56,8 +56,11 @@ class ModelInference:
 
 
 if __name__ == "__main__":
-    im = Image.open("/home/sascha/camara_data/IMG_20210324_154137.jpg")
-    array = np.array(im)
+    # im = Image.open("/home/sascha/camara_data/IMG_20210324_154137.jpg")
+    # array = np.array(im)
 
-    model = ModelInference("simple_conv2d_embedding_size_16.meta")
-    print(model.predict(array))
+    model = ModelInference("simple_conv2d_embedding_size_16_angular_d-0.meta")
+    # print(model.predict(array))
+
+    joblib.dump(model.model, os.path.join(get_project_dir(),"data", "processed","app_database","model.joblib"))
+    joblib.dump(model.model, os.path.join(get_project_dir(), "data", "processed", "app_database", "preprocessor.joblib"))

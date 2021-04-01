@@ -17,21 +17,6 @@ from sklearn.decomposition import PCA
 
 import plotly.graph_objects as go
 
-# fig = go.Figure(go.Barpolar(
-#     r=[0],
-#     theta=[0],
-#     width=[0],
-#     marker_line_width=1,
-#     opacity=0.8
-# ))
-#
-# fig.update_layout(
-#     template=None,
-#     polar=dict(
-#         radialaxis=dict(range=[0, 5], showticklabels=False, ticks=''),
-#         angularaxis=dict(showticklabels=False, ticks='')
-#     )
-# )
 
 basename = "simple_conv2d_embedding_size_16_angular_d-0"
 model = ModelInference(f"{basename}.meta")
@@ -58,6 +43,7 @@ external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+server = app.server
 
 def build_upload_layout():
     children = []
