@@ -25,7 +25,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 5
       }
     }
   },
@@ -33,13 +33,13 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 5e-3
+      "learning_rate": 5e-4
     }
   },
   "metric": "None",
   "callbacks": {
     "src.models.callbacks.Checkpoint": {
-      "path": "__default_filename__",
+      "path": "__default_filename___{epoch:03d}",
       "kwargs": {
       }
     },
