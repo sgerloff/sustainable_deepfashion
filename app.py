@@ -58,6 +58,7 @@ external_stylesheets = ["https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+server = app.server
 
 def build_upload_layout():
     children = []
