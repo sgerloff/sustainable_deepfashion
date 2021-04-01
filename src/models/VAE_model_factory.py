@@ -25,10 +25,10 @@ class VAEModelFactory:
             x)
         x = layers.Conv2D(self.filters_per_conv_layer[2], kernel_size=3, strides=2, padding='same', activation='relu')(
             x)
-        x = layers.Conv2D(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same', activation='relu')(
-            x)
-        x = layers.Conv2D(self.filters_per_conv_layer[4], kernel_size=3, strides=2, padding='same', activation='relu')(
-            x)
+        # x = layers.Conv2D(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same', activation='relu')(
+        #     x)
+        # x = layers.Conv2D(self.filters_per_conv_layer[4], kernel_size=3, strides=2, padding='same', activation='relu')(
+        #     x)
         x = layers.Flatten()(x)
         x = layers.Dense(2 * self.latent_dim, activation='relu')(x)
         z_mean = layers.Dense(self.latent_dim, name='z_mean')(x)
@@ -39,10 +39,10 @@ class VAEModelFactory:
         latent_inputs = layers.Input(shape=(self.latent_dim,))
         x = layers.Dense(np.prod(self.bridge_shape), activation='relu')(latent_inputs)
         x = layers.Reshape(self.bridge_shape)(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same',
-                                   activation='relu')(x)
-        x = layers.Conv2DTranspose(self.filters_per_conv_layer[2], kernel_size=3, strides=2, padding='same',
-                                   activation='relu')(x)
+        # x = layers.Conv2DTranspose(self.filters_per_conv_layer[3], kernel_size=3, strides=2, padding='same',
+        #                            activation='relu')(x)
+        # x = layers.Conv2DTranspose(self.filters_per_conv_layer[2], kernel_size=3, strides=2, padding='same',
+        #                            activation='relu')(x)
         x = layers.Conv2DTranspose(self.filters_per_conv_layer[1], kernel_size=3, strides=2, padding='same',
                                    activation='relu')(x)
         x = layers.Conv2DTranspose(self.filters_per_conv_layer[0], kernel_size=3, strides=2, padding='same',
