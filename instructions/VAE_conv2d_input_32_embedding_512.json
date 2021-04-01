@@ -25,7 +25,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 5
+        "epochs": 100
       }
     }
   },
