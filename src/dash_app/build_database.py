@@ -20,21 +20,29 @@ def write_prediction_dataframe_from_metafile(metafile, dataframe="data/processed
     prediction = model.predict(dataset)
 
     output_dataframe = dataframe[["image"]].copy()
+    output_dataframe["web_image"] = output_dataframe["image"].apply(lambda img: get_webadress_of_image(img))
+
     output_dataframe["prediction"] = list(prediction)
     output_dataframe["prediction"] = output_dataframe["prediction"].apply(lambda x: list(x))
 
     return output_dataframe
 
 
+def get_webadress_of_image(img):
+    img = remove_project_dir(img)
+    list_of_dir = img.split(os.sep)
+    return "http://d2fcl18pl6lkip.cloudfront.net/"+os.path.join(*list_of_dir[2:])
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--meta',
                         type=str,
-                        default="simple_conv2d_embedding_size_32-1.meta",
+                        default="simple_conv2d_embedding_size_16_angular_d-0.meta",
                         help='metadata file in models/')
     parser.add_argument('--dataframe',
                         type=str,
-                        default="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+                        default="data/processed/app_database.joblib",
                         help='dataframe file (joblib)')
     args = parser.parse_args()
 

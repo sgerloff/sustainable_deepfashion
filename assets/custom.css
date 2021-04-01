@@ -1,3 +1,7 @@
+A {
+    text-color: blue;
+}
+
 #title {
     text-align: center;
     margin-top: 1cm;
@@ -25,8 +29,16 @@
     margin-bottom: 1cm;
 }
 
+#drag-box {
+    position: relative;
+}
+
 #upload-image {
     max-width: 6cm;
+}
+
+#default-image {
+    max-width:6cm
 }
 
 #output-image-upload {
@@ -34,17 +46,12 @@
 }
 
 #embedding-plot {
-    z-index: 100;
+
 }
 
 #output-image-prediction {
     width: 100%;
-}
-
-#prediction-image {
-    border: 5px solid #000000;
-    max-width: 300px;
-    max-height: 300px;
+    min-height: 10cm;
 }
 
 #prediction-img {
@@ -57,10 +64,20 @@
 ul {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
     list-style-type: none;
 }
 
 li {
     height: 200px;
     flex-grow: 1;
+}
+
+#prediction-box{
+    width: 70%;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 }

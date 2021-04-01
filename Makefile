@@ -3,7 +3,7 @@ MIN_PAIR_COUNT = 10
 INSTRUCTION =
 DEEPFASHION_DATA = merged
 
-setup-data: setup-deepfashion-train-data setup-deepfashion-validation-data setup-data-dsr-data merge-database preprocess
+setup-data: setup-deepfashion-train-data setup-deepfashion-validation-data setup-data-dsr-data setup-data-vinted merge-database preprocess
 
 setup-deepfashion-train-data: DEEPFASHION_DATA = train
 setup-deepfashion-train-data: download-df-train extract-df-train database-df-train

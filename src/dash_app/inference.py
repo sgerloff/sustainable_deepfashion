@@ -5,6 +5,7 @@ import numpy as np
 
 import base64, io
 
+import joblib
 
 def convert_base64_string_to_array(base64_string):
     decoded = base64.b64decode(base64_string.split(",")[1])
@@ -31,7 +32,7 @@ def normalize_vector(vec):
 
 class ModelInference:
     def __init__(self, metafile):
-        self.model = load_model_from_metadata(metafile)
+        self.model = load_model_from_metadata(metafile, best_model_key="best_top_1_model")
         self.metadata = load_metadata(metafile)
         self.preprocessor, self.input_shape = self.get_model_specifics()
 
@@ -41,9 +42,14 @@ class ModelInference:
 
     def predict(self, base64_string):
         array = convert_base64_string_to_array(base64_string)
+
         image = tf.expand_dims(array, 0)
         image = tf.image.resize(image, [self.input_shape[0], self.input_shape[1]])
-        return np.array(self.model.predict(image))
+        image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+        image = self.preprocessor(image)
+
+        pred = self.model.predict(image)
+        return np.array(pred)
 
     def get_metric(self):
         return self.model.loss._fn_kwargs["distance_metric"]
