@@ -240,8 +240,9 @@ class InstructionParser:
 
     def replace_default_filename_in_kwargs(self, dict_in):
         for key, value in dict_in.items():
-            if "__default_filename__" in value:
-                dict_in[key] = value.replace("__default_filename__", self.identifier)
+            if isinstance(value, str):
+                if "__default_filename__" in value:
+                    dict_in[key] = value.replace("__default_filename__", self.identifier)
 
         return dict_in
 
