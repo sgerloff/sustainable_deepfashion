@@ -1,2 +1,8 @@
 train
 validation
+pair-directories
+vinted_shirts
+vinted_sleeveless_top
+vinted_t-shirts
+vinted_short_sleeve_blouse
+*.joblib
