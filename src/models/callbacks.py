@@ -234,7 +234,7 @@ class VAETopKValidation(TopKValidation):
         #     input_shape = (self.model.encoder.layers[0].input.shape[1],
         #                    self.model.encoder.layers[0].input.shape[2],
         #                    self.model.encoder.layers[0].input.shape[3])
-        input_shape = (32, 32, 3)
+        input_shape = (224, 224, 3)
         factory = RandomPairDatasetFactory(validation_df, preprocessor=preprocessor, input_shape=input_shape)
         return factory.get_dataset(batch_size=16, shuffle=False)
 
