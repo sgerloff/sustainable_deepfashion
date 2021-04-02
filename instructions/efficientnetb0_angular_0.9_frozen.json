@@ -20,7 +20,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 50
+        "epochs":100
       }
     }
   },
@@ -41,7 +41,7 @@
   "callbacks": {
     "src.models.callbacks.CyclicLR": {
       "base_lr": 1e-5,
-      "max_lr": 5e-3,
+      "max_lr": 1e-2,
       "step_size": 37560,
       "mode": "exp_range"
     }
