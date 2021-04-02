@@ -5,6 +5,8 @@ from src.data.flat_dataset_factory import FlatDatasetFactory
 
 import argparse
 
+from sklearn.decomposition import PCA
+import tensorflow as tf
 
 def write_prediction_dataframe_from_metafile(metafile, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib"):
     model = load_model_from_metadata(metafile, best_model_key="best_top_1_model")
@@ -25,13 +27,19 @@ def write_prediction_dataframe_from_metafile(metafile, dataframe="data/processed
     output_dataframe["prediction"] = list(prediction)
     output_dataframe["prediction"] = output_dataframe["prediction"].apply(lambda x: list(x))
 
-    return output_dataframe
+    return output_dataframe, prediction, model
 
 
 def get_webadress_of_image(img):
     img = remove_project_dir(img)
     list_of_dir = img.split(os.sep)
     return "http://d2fcl18pl6lkip.cloudfront.net/"+os.path.join(*list_of_dir[2:])
+
+
+def get_PCA_components(prediction):
+    pca = PCA(n_components=prediction.shape[1])
+    pca.fit(prediction)
+    return pca.components_
 
 
 if __name__ == "__main__":
@@ -47,7 +55,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     metadata_file = args.meta
-    output_dataframe = write_prediction_dataframe_from_metafile(metadata_file, dataframe=args.dataframe )
+    output_dataframe, prediction, model = write_prediction_dataframe_from_metafile(metadata_file, dataframe=args.dataframe )
+
 
     basename = os.path.splitext(metadata_file)[0]
-    output_dataframe.to_csv(os.path.join(get_project_dir(), "data", "processed", f"{basename}_predictions.csv"))
+
+    # Create Folder if needed:
+    output_folder = os.path.join(get_project_dir(), "data", "processed", f"{basename}")
+    if not os.path.isdir(output_folder):
+        os.makedirs(output_folder)
+
+    # Write dataframe to csv:
+    output_dataframe.to_csv(os.path.join(output_folder, f"{basename}_predictions.csv"))
+
+    # Write principle component to pickle
+    pca_components = get_PCA_components(prediction)
+    joblib.dump(pca_components, os.path.join(output_folder, f"{basename}_pca.joblib"))
+
+    # Save trained model:
+    tf.saved_model.save(model, os.path.join(output_folder, f"{basename}_saved_model"))
