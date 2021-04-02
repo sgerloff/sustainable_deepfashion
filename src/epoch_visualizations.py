@@ -6,7 +6,7 @@ from tqdm import tqdm
 from PIL import Image
 
 def predict_epochs(instruction_parser):
-    path = os.path.join(get_project_dir(), 'docs', 'assets', 'VAE_visuals', 'input', '000029_4.jpg')
+    path = os.path.join(get_project_dir(), 'docs', 'assets', 'VAE_visuals', 'input', '000039_6.jpg')
     image = Image.open(path)
     image = image.resize((224, 224))
     data_render = np.asarray(image) / 255.
