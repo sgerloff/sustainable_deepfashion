@@ -48,10 +48,10 @@ class AugmentedTripletDatasetFactory(TripletDatasetFactory):
         x = self.randomRotation(tf.expand_dims(x, axis=0))
         x = tf.reshape(x, tmp_shape)
 
-        x = tf.image.random_brightness(x, 64)
-        x = tf.image.random_contrast(x, 0.7, 1.)
-        x = tf.image.random_hue(x, 0.05)
-        x = tf.image.random_saturation(x, 0.6, 1.0)
+        x = tf.image.random_brightness(x, 5)
+        x = tf.image.random_contrast(x, 0.9, 1.)
+        # x = tf.image.random_hue(x, 0.05)
+        # x = tf.image.random_saturation(x, 0.6, 1.0)
         x = tf.clip_by_value(x, 0., 255.)
         x = tf.cast(x, tf.float16)
         return x
