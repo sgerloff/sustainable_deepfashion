@@ -22,10 +22,10 @@
       "latent_dim": 512,
       "filters_per_conv_layer": "[32, 64, 128, 256, 512]"
     },
-    "load": "None",
+    "load": "VAE_conv2d_input_224_embedding_512.meta",
     "fit": {
       "kwargs": {
-        "epochs": 50
+        "epochs": 100
       }
     }
   },
@@ -33,7 +33,7 @@
   "optimizer": {
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
-      "learning_rate": 5e-4
+      "learning_rate": 3e-5
     }
   },
   "metric": "None",
