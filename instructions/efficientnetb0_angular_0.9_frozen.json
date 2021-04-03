@@ -1,26 +1,22 @@
 {
+  "copy_instruction": "efficientnetb0_frozen.json",
   "train_data": {
-    "dataframe": "data/processed/category_id_1_min_pair_count_10_deepfashion_train.joblib",
-    "factory": "src.data.triplet_dataset_factory.TripletDatasetFactory",
+    "factory": "src.data.triplet_dataset_factory.AugmentedTripletDatasetFactory",
     "kwargs": {
-      "batch_size": 32,
-      "data_slice_ratio": 1.0,
-      "shuffle": "True"
+      "batch_size": 32
     }
   },
   "validation_data": "None",
   "model": {
     "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0TripletModelFactory",
-    "basemodel_freeze_ratio": 0.9,
+    "basemodel_freeze_ratio": 0.95,
     "kwargs": {
-      "input_shape": "(224, 224, 3)",
-      "embedding_size": 16,
-      "extraction_layers_size": "[1024, 512, 256]"
+      "embedding_size": 16
     },
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs":100
+        "epochs":50
       }
     }
   },
@@ -28,7 +24,7 @@
     "optimizer": "tensorflow.keras.optimizers.Adam",
     "kwargs": {
       "learning_rate": 1e-5,
-      "clipnorm": 0.5
+      "clipnorm": 1.0
     }
   },
   "loss": {
@@ -41,7 +37,7 @@
   "callbacks": {
     "src.models.callbacks.CyclicLR": {
       "base_lr": 1e-5,
-      "max_lr": 1e-2,
+      "max_lr": 5e-2,
       "step_size": 37560,
       "mode": "exp_range"
     }

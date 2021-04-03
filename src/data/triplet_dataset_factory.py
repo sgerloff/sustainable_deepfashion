@@ -41,15 +41,18 @@ class TripletDatasetFactory:
 class AugmentedTripletDatasetFactory(TripletDatasetFactory):
     def __init__(self, database, preprocessor=(lambda x: x), input_shape=(224, 224, 3)):
         super().__init__(database, preprocessor=preprocessor, input_shape=input_shape)
-        self.randomRotation = tf.keras.layers.experimental.preprocessing.RandomRotation(0.5, fill_mode="wrap")
+        self.randomRotation = tf.keras.layers.experimental.preprocessing.RandomRotation(0.5, fill_mode="reflect")
+        self.randomZoom = tf.keras.layers.experimental.preprocessing.RandomZoom((0.0,-0.5))
 
     def augment(self, x):
         tmp_shape = x.shape
-        x = self.randomRotation(tf.expand_dims(x, axis=0))
+        x = tf.expand_dims(x, axis=0)
+        x = self.randomRotation(x)
+        x = self.randomZoom(x)
         x = tf.reshape(x, tmp_shape)
 
-        x = tf.image.random_brightness(x, 5)
-        x = tf.image.random_contrast(x, 0.9, 1.)
+        # x = tf.image.random_brightness(x, 5)
+        # x = tf.image.random_contrast(x, 0.9, 1.)
         # x = tf.image.random_hue(x, 0.05)
         # x = tf.image.random_saturation(x, 0.6, 1.0)
         x = tf.clip_by_value(x, 0., 255.)

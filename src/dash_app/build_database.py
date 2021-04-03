@@ -8,8 +8,13 @@ import argparse
 from sklearn.decomposition import PCA
 import tensorflow as tf
 
-def write_prediction_dataframe_from_metafile(metafile, dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib"):
+def write_prediction_dataframe_from_metafile(metafile,
+                                             dataframe="data/processed/category_id_1_min_pair_count_10_deepfashion_validation.joblib",
+                                             isVAE=False):
     model = load_model_from_metadata(metafile, best_model_key="best_top_1_model")
+    if isVAE:
+        model = model.encoder
+
     metadata = load_metadata(metafile)
 
     ip = InstructionParser(metadata["instruction"], is_dict=True)
@@ -19,7 +24,11 @@ def write_prediction_dataframe_from_metafile(metafile, dataframe="data/processed
                                          preprocessor=ip.model_factory.preprocessor(),
                                          input_shape=ip.model_factory.input_shape)
     dataset = dataset_factory.get_dataset(batch_size=64, shuffle=False)
-    prediction = model.predict(dataset)
+
+    if isVAE:
+        _, _, prediction = model.predict(dataset)
+    else:
+        prediction = model.predict(dataset)
 
     output_dataframe = dataframe[["image"]].copy()
     output_dataframe["web_image"] = output_dataframe["image"].apply(lambda img: get_webadress_of_image(img))
@@ -52,10 +61,13 @@ if __name__ == "__main__":
                         type=str,
                         default="data/processed/app_database.joblib",
                         help='dataframe file (joblib)')
+    parser.add_argument('--VAE', type=bool, default=False, help="Predict using the VAE procedure")
     args = parser.parse_args()
 
     metadata_file = args.meta
-    output_dataframe, prediction, model = write_prediction_dataframe_from_metafile(metadata_file, dataframe=args.dataframe )
+    output_dataframe, prediction, model = write_prediction_dataframe_from_metafile(metadata_file,
+                                                                                   dataframe=args.dataframe,
+                                                                                   isVAE=args.VAE)
 
 
     basename = os.path.splitext(metadata_file)[0]
