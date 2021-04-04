@@ -37,8 +37,14 @@ def append_to_database_and_resize_images(df, subfolder, target_path, pair_id, ou
 
             image = Image.open(old_filepath)
             image_facing_up = ImageOps.exif_transpose(image)
-            new_image = image_facing_up.resize(output_shape)
-            new_image.save(new_filepath, format='JPEG')
+            image_width = image_facing_up.size[0]
+            image_height = image_facing_up.size[1]
+            min_width = output_shape[0]
+            min_height = output_shape[1]
+            i = min(min_width/image_width, min_height/image_height)
+            a = max(min_width/image_width, min_height/image_height)
+            image_facing_up.thumbnail((output_shape[0]*a/i, output_shape[1]*a/i), Image.ANTIALIAS)
+            image_facing_up.save(new_filepath, format='JPEG')
 
             df.loc[index, 'style'] = 1
             df.loc[index, 'bounding_box'] = [0, 0, output_shape[0], output_shape[1]]
