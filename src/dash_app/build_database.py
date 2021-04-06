@@ -55,7 +55,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--meta',
                         type=str,
-                        default="simple_conv2d_embedding_size_16_angular_d-0.meta",
+                        default="simple_conv2d_embedding_size_20_angular_d_augmented.meta",
                         help='metadata file in models/')
     parser.add_argument('--dataframe',
                         type=str,
