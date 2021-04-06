@@ -69,16 +69,16 @@ class VAETopKAccuracy(TopKAccuracy):
 
 
 if __name__ == "__main__":
-    metadata_file = "simple_conv2d_embedding_size_16_angular_d-0.meta"
+    metadata_file = "mobilenet_v2_angular_0.9_frozen-0.meta"
     metadata = load_metadata(metadata_file)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
 
     model = load_model_from_metadata(metadata_file, best_model_key="best_top_1_model")
 
-    path_to_df = metadata["instruction"]["callbacks"]["src.models.callbacks.TopKValidation"]["dataframe"]
+    path_to_df = os.path.join(get_project_dir(), "data", "processed", "category_id_1_min_pair_count_10_deepfashion_test.joblib")
     validation_dataframe = load_dataframe(path_to_df)
     factory = RandomPairDatasetFactory(validation_dataframe, preprocessor=ip.model_factory.preprocessor())
     dataset = factory.get_dataset()
 
-    topk = TopKAccuracy(model, dataset, distance_metric="angular")
+    topk = TopKAccuracy(model, dataset, distance_metric=model.loss._fn_kwargs["distance_metric"])
     print(topk.get_top_k_accuracies(k_list=[1, 5, 10]))

@@ -38,12 +38,13 @@ def get_epoch_dataframe(dataframe, predictions, epoch=0, k=10):
 
 if __name__ == "__main__":
 
-    instruction = "simple_conv2d_embedding_size_16_angular_d.json"
+    instruction = "simple_conv2d_embedding_size_20_angular_d_augmented.json"
 
     weight_dict = {
         0: None,
-        1: os.path.join(get_project_dir(), "models", "simple_conv2d_embedding_size_16_angular_d-0_best_top_1.h5")
     }
+    for i in range(1,39):
+        weight_dict[i] = f"simple_conv2d_embedding_size_20_angular_d_augmented_{i:02d}.h5"
 
     ip = InstructionParser(instruction)
     model = ip.get_model()
@@ -60,6 +61,9 @@ if __name__ == "__main__":
         epoch_dataframes.append(get_epoch_dataframe(dataframe, prediction, epoch=epoch, k=10))
 
     df = pd.concat(epoch_dataframes)
+
+    joblib.dump(df, os.path.join(get_project_dir(),"reports", "simple_conv2d_embedding_size_20_angular_d_augmented_df.joblib"))
+
     fig = px.scatter(df,
                      x="pred_pca1",
                      y="pred_pca2",
@@ -67,12 +71,13 @@ if __name__ == "__main__":
                      color="pair_id",
                      range_x=[-1, 1],
                      range_y=[-1, 1],
-                     width=500,
-                     height=500,
                      labels={
-                         "pred_pca1": "x_1",
-                         "pred_pca2": "x_2"
+                         "pred_pca1": "x",
+                         "pred_pca2": "y"
                      }
                      )
-
+    fig.update_yaxes(
+        scaleanchor="x",
+        scaleratio=1
+    )
     fig.write_html("/home/sascha/px_test1.html")
