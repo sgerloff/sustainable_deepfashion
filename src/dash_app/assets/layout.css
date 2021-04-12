@@ -1,0 +1,29 @@
+.container{
+    display: flex;
+    margin: auto;
+    position: absolute;
+    width: 28cm;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.menu-container{
+    background-color: #F0F0F0;
+    width: 12cm;
+    overflow: auto;
+}
+
+.prediction-container{
+    width: 100%;
+    overflow: hidden;
+}
+
+.vertical-center{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

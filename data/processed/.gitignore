@@ -2,3 +2,7 @@
 *.joblib
 #Ignore all subfolders
 category_1_min_count_10
+train
+validation
+pair-directories
+app_database

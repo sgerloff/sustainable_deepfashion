@@ -1,0 +1,16 @@
+{
+  "copy_instruction": "simple_conv2d.json",
+  "model": {
+    "kwargs": {
+      "embedding_size": 256
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-5,
+      "max_lr": 1e-3,
+      "step_size": 5184,
+      "mode": "exp_range"
+    }
+  }
+}

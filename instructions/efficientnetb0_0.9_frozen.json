@@ -1,0 +1,35 @@
+{
+  "copy_instruction": "efficientnetb0_frozen.json",
+  "train_data": {
+    "kwargs": {
+      "batch_size": 32
+    }
+  },
+  "model": {
+    "factory": "src.models.efficient_net_triplet_model_factory.EfficientNetB0TripletModelFactory",
+    "basemodel_freeze_ratio": 0.9,
+    "kwargs": {
+      "embedding_size": 32
+    },
+    "fit": {
+      "kwargs": {
+        "epochs": 50
+      }
+    }
+  },
+  "optimizer": {
+    "optimizer": "tensorflow.keras.optimizers.Adam",
+    "kwargs": {
+      "learning_rate": 1e-5,
+      "clipnorm": 0.5
+    }
+  },
+  "callbacks": {
+    "src.models.callbacks.CyclicLR": {
+      "base_lr": 1e-5,
+      "max_lr": 1e-1,
+      "step_size": 37560,
+      "mode": "exp_range"
+    }
+  }
+}

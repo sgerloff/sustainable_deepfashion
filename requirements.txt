@@ -9,3 +9,8 @@ tensorflow-addons
 numpy
 requests
 zipfile38
+plotly
+PyQt5
+sklearn
+dash
+gunicorn

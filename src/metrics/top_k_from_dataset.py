@@ -1,4 +1,5 @@
 from src.data.flat_dataset_factory import FlatDatasetFactory
+from src.data.random_pair_dataset_factory import RandomPairDatasetFactory
 from src.instruction_utility import *
 import numpy as np
 
@@ -68,15 +69,16 @@ class VAETopKAccuracy(TopKAccuracy):
 
 
 if __name__ == "__main__":
-    metadata_file = "simple_conv2d.meta"
+    metadata_file = "mobilenet_v2_angular_0.9_frozen-0.meta"
     metadata = load_metadata(metadata_file)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
-    model = load_model_from_metadata(metadata_file)
 
-    path_to_df = metadata["instruction"]["validation_data"]["dataframe"]
+    model = load_model_from_metadata(metadata_file, best_model_key="best_top_1_model")
+
+    path_to_df = os.path.join(get_project_dir(), "data", "processed", "category_id_1_min_pair_count_10_deepfashion_test.joblib")
     validation_dataframe = load_dataframe(path_to_df)
-    factory = FlatDatasetFactory(validation_dataframe, preprocessor=ip.model_factory.preprocessor())
+    factory = RandomPairDatasetFactory(validation_dataframe, preprocessor=ip.model_factory.preprocessor())
     dataset = factory.get_dataset()
 
-    topk_loop = TopKAccuracy(model, dataset, distance_metric="angular")
-    print(topk_loop.get_top_k_accuracies(k_list=[1, 5, 10]))
+    topk = TopKAccuracy(model, dataset, distance_metric=model.loss._fn_kwargs["distance_metric"])
+    print(topk.get_top_k_accuracies(k_list=[1, 5, 10]))

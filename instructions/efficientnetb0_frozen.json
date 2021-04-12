@@ -20,7 +20,7 @@
     "load": "None",
     "fit": {
       "kwargs": {
-        "epochs": 100
+        "epochs": 50
       }
     }
   },
@@ -35,11 +35,7 @@
       "learning_rate": 1e-5
     }
   },
-  "metric": {
-    "metric": "src.metrics.triplet_metrics.PessimisticTripletMetric",
-    "kwargs": {
-    }
-  },
+  "metric": "None",
   "callbacks": {
     "src.models.callbacks.Checkpoint": {
       "path": "__default_filename__",
@@ -61,7 +57,7 @@
     "src.models.callbacks.CyclicLR": {
       "base_lr": 1e-5,
       "max_lr": 5e-3,
-      "step_size": 5184,
+      "step_size": 37560,
       "mode": "exp_range"
     }
   },

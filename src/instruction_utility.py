@@ -25,14 +25,22 @@ def load_metadata(path):
     return metadata_
 
 
-def load_model_from_metadata(path, compile=True):
+def load_model_from_metadata(path, compile=True, best_model_key=None):
     metadata = load_metadata(path)
     ip = InstructionParser(metadata["instruction"], is_dict=True)
     model = ip.get_model()
-    model.load_weights(os.path.join(get_project_dir(), metadata["saved_model"]))
+
     compile_kwargs = get_compile_kwargs_from_instruction_parser(ip)
     if compile:
         model.compile(**compile_kwargs)
+
+    model.built = True  # This line is required for VAE
+
+    if best_model_key is None:
+        model.load_weights(os.path.join(get_project_dir(), metadata["saved_model"]))
+    else:
+        model.load_weights(os.path.join(get_project_dir(), metadata[best_model_key]))
+
     return model
 
 
@@ -139,7 +147,7 @@ class InstructionParser:
             ratio = self.instruction["model"]["basemodel_freeze_ratio"]
 
         if ratio is not None:
-            self.model_factory.set_basemodel_freeze_ratio(ratio)
+            self.model_factory.set_basemodel_freeze_ratio(ratio, batch_norm_trainable=True)
 
     def load_model_factory_from_metafile(self):
         metadata = load_metadata(self.instruction["model"]["load"])
@@ -237,8 +245,9 @@ class InstructionParser:
 
     def replace_default_filename_in_kwargs(self, dict_in):
         for key, value in dict_in.items():
-            if value == "__default_filename__":
-                dict_in[key] = self.identifier
+            if isinstance(value, str):
+                if "__default_filename__" in value:
+                    dict_in[key] = value.replace("__default_filename__", self.identifier)
 
         return dict_in
 

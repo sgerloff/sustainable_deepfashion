@@ -15,16 +15,16 @@ class TripletModelOutputParser:
             content = file.readlines()
 
         end_of_epochs = []
-        for line in content:
-            if "validation: " in line:
-                end_of_epochs.append(line)
+        for i,line in enumerate(content):
+            if "validation " in line:
+                end_of_epochs.append(content[i-2] + content[i])
 
         return end_of_epochs
 
     def get_top_k_patterns(self, k_list):
         top_k_patterns = {}
         for i in k_list:
-            top_k_patterns[f"top_{i}"] = f"(?<=\stop_{i}\s=\s)\d*\.\d*"
+            top_k_patterns[f"top_{i}"] = f"(?<=top_{i}\s=\s)\d*\.\d*"
         return top_k_patterns
 
 
@@ -88,9 +88,9 @@ class VAEModelOutputParser(TripletModelOutputParser):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parses the output files to retrieve some logging data that is added to the metafile')
-    parser.add_argument('--output', default="reports/VAE_convd.out", type=str,
+    parser.add_argument('--output', default="reports/simple_conv2d_embedding_size_20_angular_d_augmented.out", type=str,
                         help='File containing the standard output of the training run')
-    parser.add_argument('--meta', default="../models/VAE_conv2d.meta", type=str,
+    parser.add_argument('--meta', default="../models/simple_conv2d_embedding_size_20_angular_d_augmented.meta", type=str,
                         help='metadata file to add the retrieved logs too')
 
     args = parser.parse_args()

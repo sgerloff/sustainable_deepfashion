@@ -13,8 +13,8 @@ class TripletModelFactory:
     def set_embedding_model(self):
         pass
 
-    def set_basemodel_freeze_ratio(self, ratio):
-        self.basemodel = savely_unfreeze_layers_of_model(self.basemodel, ratio)
+    def set_basemodel_freeze_ratio(self, ratio, batch_norm_trainable=False):
+        self.basemodel = savely_unfreeze_layers_of_model(self.basemodel, ratio, batch_norm_trainable=batch_norm_trainable)
 
     def get_model(self):
         input_image = tf.keras.layers.Input(self.input_shape)
