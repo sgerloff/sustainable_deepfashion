@@ -1,21 +1,23 @@
-# Our prototype solution
+<p align="center">
+  <img src="https://github.com/sgerloff/sustainable-deepfashion-dash/blob/main/assets/sustainable_deepfashion_title.png?raw=true" width=512px/>
+</p>
 
-## Access our app [here](https://sustainable-deepfashion-dash.herokuapp.com/).
+Circular fashion solves many ethical and environment problems of the fast-fashion industry. However, finding items that suit your style from sustainable sources, such as the second-hand market, can prove to be quite hard. Our app demonstrates how we can solve this issue with the power of deep-learning.
 
-![app](docs/assets/app_screen_shot.png)
+# [Prototype](https://sustainable-deepfashion-dash.herokuapp.com/) Solution
 
+<p align="center">
+  <a href="https://sustainable-deepfashion-dash.herokuapp.com/">
+  <img src="https://github.com/sgerloff/sustainable_deepfashion/blob/main/docs/assets/dash-app-screenshot.jpg?raw=true" width=385px/>
+  </a>
+</p>
 
+This app demonstrates our model has learned to understand the similarity between photos of fashion items with respect to their color, pattern and more, instead of relying soley on the similarity between the images themselves.
+On top, we allow users to shift their predictions to add stripes or floral patterns. 
+While, this functionality is limited by the rather small database (10000 items), it clearly demonstrates that this model can also be used for inspiration and exploration of the user.
+Currently, the database for the predictions is focused on short-sleeved tops, which the model was trained on.
 
-# Sustainable Deepfashion
-Circular fashion solves 21st century developments in the fashion industry - i.e. a growing neglect about social and environmental issues surrounding the production of clothing - by trying to build a more sustainable business model. In a circular fashion economy every piece of clothing gets recycled, rented, repaired, redesigned or resold. 
-At the moment it is nonetheless quite hard to find environment-friendly sources to buy or rent from. It could also be difficult to find clothing that matches your style, as a fast fashion based brand has a larger collection to choose from.
-
-To this end, our project will focus on building an app that lets you take or upload a picture from any piece of clothing and matches this picture to similar pieces of clothing from sustainable sources, be it fashion brands or second-hand offerings. 
-
-The strategy is to implement one-shot learning techniques developed for face-recognition and train the model to match pictures of fashion items to that of sustainable sources. Using Tensorflow, we employ transfer learning to start with a pretrained convolutional network, e.g. the EfficientNetB0. This model is trained on the deepfashion2 dataset, as well as our own data. The output of the trained model is an embedding vector, whose L2-distance to another embedding is small if the pictures contain the same (or similar) items and large otherwise.
-
-Finally, the user provided image is checked against a database containing sustainable fashion to provide the Top 5 closest alternatives from Ebay Kleinanzeigen, sustainable brands, or similar.
-
+[**Feel free to try it out for yourself!**](https://sustainable-deepfashion-dash.herokuapp.com/)
 
 # Concept
 
