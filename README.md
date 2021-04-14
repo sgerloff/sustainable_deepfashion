@@ -21,7 +21,7 @@ Currently, the database for the predictions is focused on short-sleeved tops, wh
 
 # Concept
 
-![Concept](docs/assets/concept.png)
+![Concept](docs/assets/concept.jpg)
 
 # Top-k accuracies
 
