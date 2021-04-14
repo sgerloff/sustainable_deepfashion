@@ -17,8 +17,8 @@ On top of that, we allow users to shift their predictions to add stripes or flor
 While this functionality is limited by the rather small database (10000 items), it clearly demonstrates that this model can also be used for the inspiration and exploration of the user.
 Currently, the database for the predictions is focused on short-sleeved tops, which the model was trained on.
 
-[**Feel free to try it out for yourself!**](https://sustainable-deepfashion-dash.herokuapp.com/)
-(Please be patient with loading times. Heroku is an amazing free product, but may take some time to fire up the instance.)
+[**Feel free to try it out for yourself!**](https://sustainable-deepfashion-dash.herokuapp.com/)<br/>
+(Please be patient. Heroku is an amazing, free product, but may take some time to fire up the instance.)
 
 # Concept
 <p align="center">
@@ -31,7 +31,7 @@ Our app implements a **content-based recommendation** system, which works as fol
 
 We teach the model similarities between fashion items, with respect to their colors, prints, and patterns. To this end, we employ the semi-hard triplet loss function, which operates on a batch containing both positive (matching items) and negative examples. The loss compares the hardest positive example, i.e. the positive pair with the largest distance, to a random negative example. Penalizing large distances between the positive pair while rewarding large distances between the negative pair, the model learns to place matching items close to each other in the latent space.
 
-To train this model, we require labeled data for matching fashion items, which we obtain from three different sources. First, we utilize the [DeepFashion2](https://github.com/switchablenorms/DeepFashion2) dataset, which contains commercial and user image pairs for various categories of clothes. Second, we have gathered pictures from friends and families, providing a high variety of different angles, zooms, and backgrounds for the same item. Finally, we have scraped data from [Vinted](https://www.vinted.de/), which directly reflects the distribution of data we want to operate on and provides a huge variety of different items.
+To train this model, we require labeled data for matching fashion items, which we obtain from three different sources. First, we utilize the [DeepFashion2](https://github.com/switchablenorms/DeepFashion2) dataset, which contains commercial and user image pairs for various categories of clothes. Second, we have gathered pictures from friends and families, providing a high variety of different angles, zooms, and backgrounds for the same item. Finally, we have scraped data from [Vinted](https://www.vinted.de/), which directly reflects the distribution of data we want to operate on and provides a huge variety of different items. In addition, we augment the data by rotating and cropping the images randomly.
 
 In total, we end up with a dataset containing up to 500.000 images of 10.000 different items from the category of short-sleeved tops, which we have focused on. The training was performed on K80 GPUs on both AWS and Google Cloud. To manage hyperparameter experimentation between multiple Data Scientists, we have implemented a custom setup, which executes a training run from a single instruction file.
 
@@ -44,7 +44,15 @@ As expected, the scraped data from Vinted needed to be cleaned before being used
 
 # Top-k Accuracies (Validation)
 
+<p align="center">
+  <img src="https://github.com/sgerloff/sustainable_deepfashion/blob/main/docs/assets/test_train_split.jpg?raw=true" width=512px/>
+</p>
+
 Experimenting with various hyperparameters, such as the dimensions of the latent space, the distance metric (L2, angular distance, ...), data augmentation, as well as different architectures, we have constructed a test scenario to compare the different models. First, we split the data with respect to the number of images per item, where items with only two images are used for the test and validation and all others are used for training. We then split the items containing only a single pair of images into a test set and a validation set of equal size.
+
+<p align="center">
+  <img src="https://github.com/sgerloff/sustainable_deepfashion/blob/main/docs/assets/top_k_visualization.jpg?raw=true" width=512px/>
+</p>
 
 During testing and validating, the model computes the representation vectors for all items in the respective set. Choosing one item out of the set, we sort all others by their relative distance to that query item. From there we compute the accuracy to find the matching item in the Top-K (k=1,5,10) predictions. Since the dataset is composed of pairs of images for various items, there is exactly one right image to find. Thus circumventing the problem that an item with lots of examples in the dataset would be easier to find.
 Finally, querying each item against all others, we compute the Top-K-Accuracy scores, which we use to compare different models.
